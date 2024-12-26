@@ -105,12 +105,12 @@ const Chatbot = ({ blogContent }) => {
                     />
                   )}
                   <div>
-                    <strong>{message.sender === 'bot' ? 'AI: ' : 'You: '}</strong>
+                    <strong>{message.sender === 'bot' ? 'Techbot: ' : 'You: '}</strong>
                     <p className="text-black">{message.text}</p>
                   </div>
                 </div>
               ))}
-              {loading && <div className="animate-pulse text-gray-500">AI is thinking...</div>}
+              {loading && <div className="animate-pulse text-gray-500">Techbot is thinking...</div>}
               {error && <div className="text-red-500">{error}</div>}
             </div>
 
