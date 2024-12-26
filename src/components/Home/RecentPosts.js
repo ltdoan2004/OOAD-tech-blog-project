@@ -13,12 +13,11 @@ const RecentPosts = ({ blogs }) => {
         </h2>
         <Link
           href="/categories/all"
-          className="inline-block font-medium text-accent dark:text-accentDark underline underline-offset-2      text-base md:text-lg"
+          className="inline-block font-medium text-accent dark:text-accentDark underline underline-offset-2 text-base md:text-lg"
         >
           view all
         </Link>
       </div>
-
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 grid-rows-2 gap-16 mt-16">
         {sortedBlogs.slice(4, 10).map((blog, index) => {
           return (
