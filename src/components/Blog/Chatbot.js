@@ -4,7 +4,6 @@ import { OpenAI } from 'openai';
 import { FiMessageCircle } from 'react-icons/fi';
 import Image from 'next/image';
 
-
 const Chatbot = ({ blogContent }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -80,38 +79,38 @@ const Chatbot = ({ blogContent }) => {
         >
           <div className="p-4 flex flex-col">
             <div className="max-h-[50vh] overflow-y-auto mb-4 scroll-smooth">
-            {messages.map((message, index) => (
-      <div key={index} 
-        className={`mb-2 p-3 rounded-md text-sm shadow-md w-full flex items-center gap-2 ${
-          message.sender === 'bot' 
-            ? 'bg-orange-200 text-orange-800 text-left flex-row' 
-            : 'bg-gray-100 text-gray-800 text-right flex-row-reverse'
-        }`}
-      >
-        {message.sender === 'bot' ? (
-          <Image 
-            src="/bot_chat.webp"
-            alt="Bot"
-            width={32}
-            height={32}
-            className="rounded-full"
-          />
-        ) : (
-          <Image 
-            src="/user_chat.webp"
-            alt="User"
-            width={32}
-            height={32}
-            className="rounded-full"
-          />
-        )}
-        <div>
-          <strong>{message.sender === 'bot' ? 'AI: ' : 'You: '}</strong>
-          <p>{message.text}</p>
-        </div>
-      </div>
-    ))}
-              {loading && <div className="animate-pulse text-gray-500">AI is thinking...</div>}
+              {messages.map((message, index) => (
+                <div key={index} 
+                  className={`mb-2 p-3 rounded-md text-sm shadow-md w-full flex items-center gap-2 ${
+                    message.sender === 'bot' 
+                      ? 'bg-orange-200 text-orange-800 text-left flex-row' 
+                      : 'bg-gray-100 text-black text-right flex-row-reverse'
+                  }`}
+                >
+                  {message.sender === 'bot' ? (
+                    <Image 
+                      src="/bot_chat.webp" 
+                      alt="Bot Avatar" 
+                      width={32} 
+                      height={32} 
+                      className="rounded-full" 
+                    />
+                  ) : (
+                    <Image 
+                      src="/user_chat.webp" 
+                      alt="User Avatar" 
+                      width={32} 
+                      height={32} 
+                      className="rounded-full" 
+                    />
+                  )}
+                  <div>
+                    <strong>{message.sender === 'bot' ? 'Techbot: ' : 'You: '}</strong>
+                    <p className="text-black">{message.text}</p>
+                  </div>
+                </div>
+              ))}
+              {loading && <div className="animate-pulse text-gray-500">Techbot is thinking...</div>}
               {error && <div className="text-red-500">{error}</div>}
             </div>
 
@@ -121,7 +120,7 @@ const Chatbot = ({ blogContent }) => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                className="flex-1 p-3 border rounded bg-white text-black placeholder-gray-500 focus:ring-2 focus:ring-blue-500"
                 placeholder="Ask about the article..."
               />
               <button 
