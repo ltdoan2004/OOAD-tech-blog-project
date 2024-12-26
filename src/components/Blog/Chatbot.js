@@ -1,12 +1,16 @@
 'use client';
 import React, { useState } from 'react';
 import { OpenAI } from 'openai';
+import { FiMessageCircle } from 'react-icons/fi';
+import Image from 'next/image';
+
 
 const Chatbot = ({ blogContent }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const apiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
   if (!apiKey) {
@@ -17,7 +21,7 @@ const Chatbot = ({ blogContent }) => {
     apiKey: apiKey,
     dangerouslyAllowBrowser: true
   });
-  console.log('blogContent:', blogContent);
+
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -53,46 +57,84 @@ const Chatbot = ({ blogContent }) => {
     }
   };
 
-  return (
-    <div className="border border-dark/10 dark:border-light/10 rounded-lg p-4 mt-8">
-      <div className="h-80 overflow-y-auto mb-4 space-y-4">
-        {messages.map((msg, idx) => (
-          <div
-            key={idx}
-            className={`${
-              msg.sender === 'user' ? 'text-right' : 'text-left'
-            } ${msg.error ? 'text-red-500' : ''}`}
-          >
-            <span className="font-semibold">
-              {msg.sender === 'user' ? 'You: ' : 'AI: '}
-            </span>
-            {msg.text}
-          </div>
-        ))}
-        {loading && (
-          <div className="text-left text-dark/50 dark:text-light/50">
-            AI is thinking...
-          </div>
-        )}
-      </div>
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !loading) {
+      handleSend();
+    }
+  };
 
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Ask about this blog post..."
-          className="flex-1 p-2 border border-dark/10 dark:border-light/10 rounded"
-        />
-        <button
-          onClick={handleSend}
-          disabled={loading}
-          className="px-4 py-2 bg-dark dark:bg-light text-light dark:text-dark rounded disabled:opacity-50"
+  return (
+    <div className="fixed bottom-4 left-4 z-50">
+      <button
+        onClick={() => setIsVisible(!isVisible)}
+        className="w-12 h-12 bg-yellow-500 rounded-full shadow-lg flex items-center justify-center text-white hover:bg-yellow-600 focus:outline-none transition-transform transform duration-300"
+        style={{ zIndex: 100 }}
+      >
+        <FiMessageCircle size={24} />
+      </button>
+
+      {isVisible && (
+        <div
+          className="fixed bottom-16 left-4 w-[45%] max-w-2xl bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white rounded-lg shadow-lg overflow-hidden transition-transform transform duration-500"
+          style={{ zIndex: 99 }}
         >
-          Send
-        </button>
+          <div className="p-4 flex flex-col">
+            <div className="max-h-[50vh] overflow-y-auto mb-4 scroll-smooth">
+            {messages.map((message, index) => (
+      <div key={index} 
+        className={`mb-2 p-3 rounded-md text-sm shadow-md w-full flex items-center gap-2 ${
+          message.sender === 'bot' 
+            ? 'bg-orange-200 text-orange-800 text-left flex-row' 
+            : 'bg-gray-100 text-gray-800 text-right flex-row-reverse'
+        }`}
+      >
+        {message.sender === 'bot' ? (
+          <Image 
+            src="/bot_chat.webp"
+            alt="Bot"
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+        ) : (
+          <Image 
+            src="/user_chat.webp"
+            alt="User"
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+        )}
+        <div>
+          <strong>{message.sender === 'bot' ? 'AI: ' : 'You: '}</strong>
+          <p>{message.text}</p>
+        </div>
       </div>
+    ))}
+              {loading && <div className="animate-pulse text-gray-500">AI is thinking...</div>}
+              {error && <div className="text-red-500">{error}</div>}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="flex-1 p-3 border rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                placeholder="Ask about the article..."
+              />
+              <button 
+                onClick={handleSend}
+                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 disabled:opacity-50"
+                disabled={loading}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
