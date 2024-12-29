@@ -6,7 +6,7 @@ import siteMetadata from "@/src/utils/siteMetaData";
 import { useThemeSwitch } from "../Hooks/useThemeSwitch";
 import { useState } from "react";
 import { cx } from "@/src/utils";
-
+import SearchBar from "../SearchBar";
 const Header = () => {
 
   const [mode, setMode] = useThemeSwitch();
