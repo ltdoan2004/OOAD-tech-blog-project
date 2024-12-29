@@ -36,9 +36,9 @@ const CommentItem = () => {
 
 const Comment = () => {
   return (
-    <div className="px-5 md:px-10 mt-8">
-      <p className="text-2xl font-semibold border-b-[3px] border-b-[#df062d] inline-block pb-1 mb-4 dark:text-white">
-        Comment (2)
+   <div className="px-5 md:px-10 mt-8">
+       <p className="text-2xl font-semibold inline-block pb-1 mb-4 dark:text-white text-black border-b-[3px] border-yellow-400 dark:border-yellow-600">
+        Comment(6)
       </p>
 
       <div className="flex gap-x-3">
