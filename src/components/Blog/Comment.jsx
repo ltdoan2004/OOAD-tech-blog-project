@@ -48,7 +48,7 @@ const Comment = () => {
             alt="Avatar"
             width={60}
             height={60}
-            className="bg-[#ff484214] rounded-full border border-[#df062d]"
+           className="bg-[#ff484214] rounded-full border border-yellow-500 "
           />
         </div>
 
@@ -62,7 +62,8 @@ const Comment = () => {
             rows={5}
           />
 
-          <button className="ml-auto bg-[#df062d] block mt-2 text-white px-4 py-1.5 rounded text-sm cursor-pointer">
+          <button 
+           className="ml-auto block mt-2 px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white"
             Comment
           </button>
         </form>
