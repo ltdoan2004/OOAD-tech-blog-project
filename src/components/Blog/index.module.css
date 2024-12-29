@@ -6,9 +6,9 @@
 .avatar {
   background: linear-gradient(
     225deg,
-    rgb(51, 255, 173) 0%,
+    rgb(255, 87, 51) 0%,
     rgb(255, 111, 97) 50%,
     rgb(255, 141, 27) 100%
   );
-  box-shadow: rgba(100, 100, 100, 0.05) -5px -5px 15px inset;
+  box-shadow: rgba(255, 255, 255, 0.05) -5px -5px 15px inset;
 }
