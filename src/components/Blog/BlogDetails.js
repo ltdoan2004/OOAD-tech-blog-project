@@ -22,7 +22,7 @@ const BlogDetails = ({ blog, slug: blogSlug }) => {
       <Link href={`/categories/${slug(blog.tags[0])}`} className="m-3">
         #{blog.tags[0]}
       </Link>
-      <div className="w-full mt-3"><Chatbot blogContent = {blog.body.raw}/></div>
+      <div className="w-full mt-3"><Chatbot blogContent = {blog.body.raw} blogUrl={`http://localhost:3000/blogs/${blogSlug}`}/></div>
     </div>
   );
 };
