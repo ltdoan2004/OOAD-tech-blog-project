@@ -21,7 +21,7 @@ const CommentItem = () => {
         <p className="font-semibold mb-1 dark:text-white">Nguyễn Văn A</p>
         <p
           className="whitespace-pre-line text-sm leading-5 dark:text-white"
-          dangerouslySetInnerHTML={{ __html: "I like this\n NVA" }}
+          dangerouslySetInnerHTML={{ __html: "I like this" }}
         />
 
         <p className="text-[#919eab] text-sm mt-1">
