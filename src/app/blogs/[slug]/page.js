@@ -1,4 +1,5 @@
 import BlogDetails from "@/src/components/Blog/BlogDetails";
+import Comment from "@/src/components/Blog/Comment";
 import RenderMdx from "@/src/components/Blog/RenderMdx";
 import Tag from "@/src/components/Elements/Tag";
 import siteMetadata from "@/src/utils/siteMetaData";
@@ -163,6 +164,8 @@ export default function BlogPage({ params }) {
         <RenderMdx blog={blog} />
       </div>
     </article>
+
+    <Comment />
     </>
    
   );
