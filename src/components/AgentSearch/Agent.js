@@ -51,7 +51,28 @@ const Agent = () => {
 
   const formatMessageWithLinks = (message) => {
     return (
-      <p>{message.content}</p>
+      <div>
+        <p className="mb-2">{message.content}</p>
+        {message.links && message.links.length > 0 && (
+          <div className="mt-2 pt-2 border-t border-gray-200">
+            <p className="text-sm font-medium mb-1">Related Articles:</p>
+            <ul className="space-y-1">
+              {message.links.map((link, index) => (
+                <li key={index}>
+                  <a 
+                    href={link.url}
+                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.title || link.url}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     );
   };
 
