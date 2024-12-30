@@ -13,15 +13,8 @@ export default function Home() {
   };
   return (
     <main className="flex flex-col items-center justify-center">
-      <SearchBar blogs={allBlogs}/>
-      <div>
-        {filteredBlogs.map(blog => (
-          <div key={blog.id}>
-            <h2>{blog.name}</h2>
-            <p>{blog.content}</p>
-          </div>
-        ))}
-      </div>
+      <SearchBar blogs={allBlogs} onSearch={handleSearch}/>
+
       <HomeCoverSection blogs={allBlogs} />
       <FeaturedPosts blogs={allBlogs} />
       <RecentPosts blogs={allBlogs} />
