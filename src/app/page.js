@@ -14,12 +14,9 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center justify-center">
       <SearchBar blogs={allBlogs} onSearch={handleSearch}/>
-
       <HomeCoverSection blogs={allBlogs} />
       <FeaturedPosts blogs={allBlogs} />
       <RecentPosts blogs={allBlogs} />
-
-
     </main>
   )
 }

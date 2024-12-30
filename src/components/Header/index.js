@@ -55,9 +55,10 @@ const toggle = () =>{
           Home
         </Link>
         <Link href="/techbot" className="mx-2">Techbot</Link>
-        <Link href="/contact" className="mx-2">
+        <Link href="/contact" className="mx-2">   
           Contact
         </Link>
+        <Link href="/login" className="mx-2">login</Link>
         <button
           onClick={() => setMode(mode === "light" ? "dark" : "light")}
           className={cx(
@@ -85,6 +86,7 @@ const toggle = () =>{
         <Link href="/contact" className="mx-2">
           Contact
         </Link>
+        <Link href="/login" className="mx-2">login</Link>
         <button
           onClick={() => setMode(mode === "light" ? "dark" : "light")}
           className={cx(
