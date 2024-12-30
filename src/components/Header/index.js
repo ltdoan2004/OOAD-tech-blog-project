@@ -1,72 +1,49 @@
-"use client";
+'use client';
 import Link from "next/link";
 import Logo from "./Logo";
-import {
-  DribbbleIcon,
-  GithubIcon,
-  LinkedinIcon,
-  MoonIcon,
-  SunIcon,
-  TwitterIcon,
-} from "../Icons";
+import { DribbbleIcon, GithubIcon, LinkedinIcon, MoonIcon, SunIcon, TwitterIcon } from "../Icons";
 import siteMetadata from "@/src/utils/siteMetaData";
 import { useThemeSwitch } from "../Hooks/useThemeSwitch";
 import { useState } from "react";
 import { cx } from "@/src/utils";
 import NotificationIcon from "./NotificationIcon";
-
 const Header = () => {
+
   const [mode, setMode] = useThemeSwitch();
   const [click, setClick] = useState(false);
 
-  const toggle = () => {
-    setClick(!click);
-  };
+const toggle = () =>{
+  setClick(!click)
+}
   return (
     <header className="w-full p-4  px-5 sm:px-10 flex items-center justify-between">
-      <Logo />
+        <Logo />
 
-      <button
-        className="inline-block sm:hidden z-50"
-        onClick={toggle}
-        aria-label="Hamburger Menu"
-      >
-        <div className="w-6 cursor-pointer transition-all ease duration-300">
-          <div className="relative">
-            <span
-              className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
-              style={{
-                transform: click
-                  ? "rotate(-45deg) translateY(0)"
-                  : "rotate(0deg) translateY(6px)",
-              }}
-            >
-              &nbsp;
-            </span>
-            <span
-              className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
-              style={{
-                opacity: click ? 0 : 1,
-              }}
-            >
-              &nbsp;
-            </span>
-            <span
-              className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
-              style={{
-                transform: click
-                  ? "rotate(45deg) translateY(0)"
-                  : "rotate(0deg) translateY(-6px)",
-              }}
-            >
-              &nbsp;
-            </span>
+        <button className="inline-block sm:hidden z-50" onClick={toggle} aria-label="Hamburger Menu">
+          <div className="w-6 cursor-pointer transition-all ease duration-300">
+            <div className="relative">
+            <span className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200" 
+            style={{
+             transform: click ? "rotate(-45deg) translateY(0)" : "rotate(0deg) translateY(6px)"
+            }}
+            
+            >&nbsp;</span>
+            <span className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
+            style={{
+              opacity: click ? 0 : 1
+             }}
+            >&nbsp;</span>
+            <span className="absolute top-0 inline-block w-full h-0.5 bg-dark dark:bg-light rounded transition-all ease duration-200"
+            style={{
+              transform: click ? "rotate(45deg) translateY(0)" : "rotate(0deg) translateY(-6px)"
+             }}
+            >&nbsp;</span>
+            </div>
+
           </div>
-        </div>
-      </button>
+        </button>
 
-      <nav
-        className=" w-max py-3 px-6 sm:px-8 border border-solid border-dark rounded-full font-medium capitalize  items-center flex  sm:hidden
+        <nav className=" w-max py-3 px-6 sm:px-8 border border-solid border-dark rounded-full font-medium capitalize  items-center flex  sm:hidden
         fixed top-6 right-1/2 translate-x-1/2 bg-light/80 backdrop-blur-sm z-50
         transition-all ease duration-300
         "
@@ -77,9 +54,7 @@ const Header = () => {
         <Link href="/" className="mr-2">
           Home
         </Link>
-        <Link href="/about" className="mx-2">
-          About
-        </Link>
+        <Link href="/techbot" className="mx-2">Techbot</Link>
         <Link href="/contact" className="mx-2">
           Contact
         </Link>
@@ -106,9 +81,7 @@ const Header = () => {
         <Link href="/" className="mr-2">
           Home
         </Link>
-        <Link href="/about" className="mx-2">
-          About
-        </Link>
+        <Link href="/techbot" className="mx-2">Techbot</Link>
         <Link href="/contact" className="mx-2">
           Contact
         </Link>

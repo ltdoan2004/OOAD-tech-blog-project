@@ -63,7 +63,7 @@ const Comment = () => {
           />
 
           <button 
-           className="ml-auto block mt-2 px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white"
+           className="ml-auto block mt-2 px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white">
             Comment
           </button>
         </form>

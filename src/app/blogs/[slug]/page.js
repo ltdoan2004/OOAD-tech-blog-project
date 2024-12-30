@@ -153,8 +153,7 @@ export default function BlogPage({ params }) {
                         </span>
                       ) : null}
 
-                      <span className="hover:underline">{heading.text}
-                      </span>
+                      <span className="hover:underline">{heading.text}</span>
                     </a>
                   </li>
                 );
