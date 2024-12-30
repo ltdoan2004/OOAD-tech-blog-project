@@ -183,8 +183,8 @@ const Chatbot = ({ blogContent, blogUrl }) => {
                     key={index}
                     className={`mb-2 p-3 rounded-lg max-w-[80%] ${
                       isBot
-                        ? 'bg-purple-600 dark:bg-yellow-400 text-dark dark:text-light' 
-                        : 'bg-purple-600 dark:bg-yellow-400 text-dark dark:text-light ml-auto'
+                        ? 'bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light' 
+                        : 'bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light ml-auto'
                       /* 
                         - ml-auto: đẩy khung của user sang phải 
                         - Hoặc bạn dùng flex + justify-end cũng được 
