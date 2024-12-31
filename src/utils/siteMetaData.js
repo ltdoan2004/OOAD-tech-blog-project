@@ -10,12 +10,7 @@ const siteMetadata = {
     siteLogo: '/logo.png',
     socialBanner: '/social-banner.png', // add social banner in the public folder
     email: 'codebucks27@gmail.com', 
-    github: 'https://github.com/codebucks27',
-    twitter: 'https://twitter.com/code_bucks',
-    facebook: 'https://facebook.com',
-    youtube: 'https://youtube.com/codebucks',
-    linkedin: 'https://www.linkedin.com/in/codebucks/',
-    dribbble: 'https://www.dribbble.com',
+    github: 'https://github.com/ltdoan2004/OOAD-tech-blog-project',
     locale: 'en-US',
   }
   
