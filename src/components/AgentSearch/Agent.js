@@ -97,7 +97,7 @@ const Agent = () => {
       */}
       <div className="w-1/3 h-full py-20 flex flex-col items-center justify-center p-2">
         <DotLottiePlayer
-          src="/animation_llqd7ey4.lottie"
+          src="/animation.json"
           autoplay
           loop
           style={{ width: "50%", height: "50%" }}
