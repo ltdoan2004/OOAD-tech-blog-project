@@ -27,7 +27,7 @@ const SearchBar = ({ blogs, onSearch }) => { // Remove blogSlug prop since we do
   };
 
   return (
-    <div className="search-bar flex flex-col justify-center items-center p-1 bg-purple-600 dark:bg-yellow-400 text-dark dark:text-light rounded-lg shadow-lg">
+    <div className="search-bar flex flex-col justify-center items-center p-1 px-1 bg-purple-600 dark:bg-yellow-400 text-white dark:text-dark rounded-lg shadow-lg">
       <div className="flex">
         <input
           type="text"
@@ -38,7 +38,7 @@ const SearchBar = ({ blogs, onSearch }) => { // Remove blogSlug prop since we do
         />
         <button
           onClick={handleSearch}
-          className="px-7 py-3 bg-purple-500 dark:bg-yellow-500 text-light hover:bg-orange-600 text-lg"
+          className="px-7 py-3 bg-purple-500 dark:bg-yellow-500 text-light dark:text-dark hover:bg-orange-600 text-lg"
         >
           Search
         </button>
