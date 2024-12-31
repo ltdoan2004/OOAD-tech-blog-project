@@ -1,12 +1,12 @@
-'use client';
+"use client";
+
 import classNames from "classnames";
 import Image from "next/image";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import styles from "./index.module.css";
-import { formatDistance, subDays } from "date-fns";
+import { formatDistance } from "date-fns";
 
-const CommentItem = () => { //
+const CommentItem = ({ text, time }) => {
   return (
     <div className="flex gap-x-4">
       <div
@@ -17,18 +17,14 @@ const CommentItem = () => { //
       >
         NA
       </div>
-
       <div>
-        <p className="font-semibold mb-1 dark:text-white">Nguyễn Văn A</p>
+        <p className="font-semibold mb-1 dark:text-white">Hồ Thiên Trường</p>
         <p
           className="whitespace-pre-line text-sm leading-5 dark:text-white"
-          dangerouslySetInnerHTML={{ __html: "I like this" }}//
+          dangerouslySetInnerHTML={{ __html: text }}
         />
-
         <p className="text-[#919eab] text-sm mt-1">
-          {formatDistance(subDays(new Date(), 3), new Date(), { 
-            addSuffix: true, //
-          })}
+          {formatDistance(new Date(time), new Date(), { addSuffix: true })}
         </p>
       </div>
     </div>
