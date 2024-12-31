@@ -35,7 +35,7 @@ export default function UserAuthForm() {
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjQwNmJhN2JkNGVjYzMwMmQyOThiN2YiLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3MTg3MDUwNzB9.ZKZbBONnV8QfA0Ofy4d2l1ke2hLZqFBy4pv7DKscGZA"
       );
       setLoading(false);
-      router.push("/");
+      router.push("/admin");
     } else {
       setError("Incorrect username or password.");
       setLoading(false);
