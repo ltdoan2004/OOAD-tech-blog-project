@@ -43,19 +43,19 @@ export default function UserAuthForm() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 dark:bg-red">
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full space-y-4 p-4 border rounded shadow"
+        className="w-full dark:w-full space-y-4 p-4 dark:p-4 border dark:border rounded-md shadow bg-white dark:bg-dark "
       >
         <div className="flex flex-col space-y-2">
-          <label htmlFor="email" className="text-sm font-medium">
+          <label htmlFor="email" className="text-sm font-medium dark:text-white text-dark ">
             Email
           </label>
           <input
             id="email"
             type="email"
-            className="border rounded p-2 text-sm"
+            className="border rounded-md p-2 text-sm"
             placeholder="Enter your email..."
             disabled={loading}
             {...form.register("email")}
@@ -68,13 +68,13 @@ export default function UserAuthForm() {
         </div>
 
         <div className="flex flex-col space-y-2">
-          <label htmlFor="password" className="text-sm font-medium">
+          <label htmlFor="password" className="text-sm font-medium dark:text-white text-dark">
             Password
           </label>
           <input
             id="password"
             type="password"
-            className="border rounded p-2 text-sm"
+            className="border rounded-md p-2 text-sm"
             placeholder="Enter your password..."
             disabled={loading}
             {...form.register("password")}
@@ -89,7 +89,7 @@ export default function UserAuthForm() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
+          className="w-full bg-purple-500 dark:bg-yellow-500 dark:text-dark text-white py-2 rounded-md"
         >
           SIGN IN
         </button>
@@ -102,7 +102,7 @@ export default function UserAuthForm() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-gray-500">Or continue with</span>
+          <span className="bg-purple-500 dark:bg-yellow-500 dark:text-dark text-white px-2 text-gray-500 ">Or continue with</span>
         </div>
       </div>
     </div>

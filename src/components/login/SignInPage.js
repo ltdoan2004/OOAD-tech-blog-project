@@ -9,7 +9,6 @@ import { cva } from "class-variance-authority";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import logo from "/public/logo.png";  // Adjust the path to your public directory for static assets
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import "@dotlottie/react-player/dist/index.css";
 // Utility function for combining class names
@@ -93,8 +92,8 @@ function SignInPage() {
       >
         Login
       </Link>
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-        <div className="absolute inset-0 bg-blue_super_dark dark:bg-secondary" />
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white   dark:border-r lg:flex">
+        <div className="absolute inset-0 bg-blue_super_dark bg-white dark:bg-dark dark:bg-secondary" />
         <div className="relative z-20 flex items-center text-lg font-medium">
         <DotLottiePlayer
           src="/animation.json"
@@ -105,24 +104,24 @@ function SignInPage() {
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
-            <p className="text-lg">
+            <p className="text-lg text-yellow-500 dark:text-purple-500">
               &ldquo;Stay Ahead with Stories, Updates, and Expert Guides from the Tech World &rdquo;
             </p>
-            <p className="text-sm text-white_blue">Contact: 0944674383 </p>
-            <footer className="text-sm">Truong Doanh Nam</footer>
+            <p className="text-sm text-white_blue text-yellow-500 dark:text-purple-500">Contact: 0944674383 </p>
+            <footer className="text-sm text-yellow-500 dark:text-purple-500">Truong Doanh Nam</footer>
           </blockquote>
         </div>
       </div>
-      <div className="flex h-full items-center p-4 lg:p-8">
+      <div className="flex h-full items-center p-4 lg:p-8 bg-dark dark:bg-light lg:rounded-lg">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">LOGIN</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="text-2xl font-semibold tracking-tight  dark:text-yellow-500 text-purple-500">LOGIN</h1>
+            <p className="text-sm text-muted-foreground dark:text-yellow-500 text-purple-500">
               Enter your username and password to continue
             </p>
           </div>
           <UserAuthForm />
-          <p className="px-8 text-center text-sm text-muted-foreground">
+          <p className="px-8 text-center text-sm text-muted-foreground dark:text-yellow-500 text-purple-500 underline">
             Do not have an account?
             <br />
             Please contact to the admin.
