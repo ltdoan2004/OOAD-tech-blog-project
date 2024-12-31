@@ -5,7 +5,7 @@ import React from "react";
 import styles from "./index.module.css";
 import { formatDistance, subDays } from "date-fns";
 
-const CommentItem = () => {
+const CommentItem = () => { //
   return (
     <div className="flex gap-x-4">
       <div
@@ -21,12 +21,12 @@ const CommentItem = () => {
         <p className="font-semibold mb-1 dark:text-white">Nguyễn Văn A</p>
         <p
           className="whitespace-pre-line text-sm leading-5 dark:text-white"
-          dangerouslySetInnerHTML={{ __html: "I like this" }}
+          dangerouslySetInnerHTML={{ __html: "I like this" }}//
         />
 
         <p className="text-[#919eab] text-sm mt-1">
-          {formatDistance(subDays(new Date(), 3), new Date(), {
-            addSuffix: true,
+          {formatDistance(subDays(new Date(), 3), new Date(), { 
+            addSuffix: true, //
           })}
         </p>
       </div>
@@ -35,10 +35,33 @@ const CommentItem = () => {
 };
 
 const Comment = () => {
+  const [comments, setComments] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Ngăn reload trang
+    if (inputValue.trim() === "") return; 
+
+    const newComment = {
+      text: inputValue,
+      time: new Date().toISOString(), // Lưu thời gian thực
+    };
+
+    setComments((prev) => [...prev, newComment]);
+    setInputValue(""); 
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault(); 
+      handleSubmit(event); 
+    }
+  };
+
   return (
-   <div className="px-5 md:px-10 mt-8">
-       <p className="text-2xl font-semibold inline-block pb-1 mb-4 dark:text-white text-black border-b-[3px] border-yellow-400 dark:border-yellow-600">
-        Comment(6)
+    <div className="px-5 md:px-10 mt-8">
+      <p className="text-2xl font-semibold inline-block pb-1 mb-4 dark:text-white text-black border-b-[3px] border-yellow-400 dark:border-yellow-600">
+        Comment({comments.length})
       </p>
 
       <div className="flex gap-x-3">
@@ -48,34 +71,35 @@ const Comment = () => {
             alt="Avatar"
             width={60}
             height={60}
-           className="bg-[#ff484214] rounded-full border border-yellow-500 "
+            className="bg-[#ff484214] rounded-full border border-yellow-500"
           />
         </div>
 
-        <form className="flex-1">
+        <form className="flex-1" onSubmit={handleSubmit}>
           <textarea
             placeholder="Enter your comment"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown} 
             className={classNames(
               "w-full rounded-md border border-[#919eab] focus:border-[#df062d] dark:bg-[#24292e] dark:text-white",
               styles.textarea
             )}
             rows={5}
           />
-
-          <button 
-           className="ml-auto block mt-2 px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white">
+          <button
+            type="submit"
+            className="ml-auto block mt-2 px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white"
+          >
             Comment
           </button>
         </form>
       </div>
 
       <div className="mt-4 flex flex-col gap-y-4">
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
-        <CommentItem />
+        {comments.map((comment, index) => (
+          <CommentItem key={index} text={comment.text} time={comment.time} />
+        ))}
       </div>
     </div>
   );
