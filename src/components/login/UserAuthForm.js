@@ -37,7 +37,7 @@ export default function UserAuthForm() {
       setLoading(false);
       router.push("/admin");
     } else {
-      setError("Incorrect username or password.");
+      setError("Incorrect email or password.");
       setLoading(false);
     }
   };
