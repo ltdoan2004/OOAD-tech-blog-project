@@ -44,7 +44,6 @@ const Footer = () => {
         />
       </form>
 
-      {//send submit successfully}
       {submitMessage && (
         <div className="mt-4 text-green-600 font-semibold">
           {submitMessage}
