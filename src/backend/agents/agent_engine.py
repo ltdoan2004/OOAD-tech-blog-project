@@ -19,7 +19,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if project_root not in sys.path:
     sys.path.append(project_root)
 
-from services import create_faiss_index, get_retriever
+from services import create_faiss_index, get_retriever, search_similar_documents
 
 import tiktoken
 
@@ -92,7 +92,10 @@ def prepare_blog_texts(blogs):
 # -----------------------------------------------------------------------------
 blogs = load_blog_data()
 texts, metadatas = prepare_blog_texts(blogs)
-
+docstore = [
+    {"content": text, "metadata": metadata} 
+    for text, metadata in zip(texts, metadatas)
+]
 vectorstore = create_faiss_index(blogs_data=blogs, texts=texts, metadatas=metadatas)
 retriever = get_retriever(vectorstore)
 if retriever is None:
@@ -125,10 +128,10 @@ def format_context(docs) -> str:
     max_token_limit = 3000  # Ensure the prompt stays well within the token limit
 
     for doc in docs:
-        url = doc.metadata.get('url')
+        url = doc["metadata"].get('url')
         if url not in unique_urls:
             unique_urls.add(url)
-            title_entry = f"- {doc.metadata['title']} ({url})"
+            title_entry = f"- {doc['metadata']['title']} ({url})"
             # Check token count before adding
             if count_tokens("\n".join(unique_titles + [title_entry])) < max_token_limit:
                 unique_titles.append(title_entry)
@@ -137,14 +140,6 @@ def format_context(docs) -> str:
     return "\n".join(unique_titles[:3])
 
 
-# -----------------------------------------------------------------------------
-# 7. Main Chat Logic
-# -----------------------------------------------------------------------------
-class MetadataOnlyChain(BaseCombineDocumentsChain):
-    """Custom chain that only stuffs doc.metadata['title'] into the prompt."""
-    def combine_docs(self, docs: list[Document], **kwargs) -> str:
-        titles = [f"{doc.metadata['title']}" for doc in docs]
-        return "\n".join(titles)
 
 
 def chat_with_agent(user_input: str) -> str:
@@ -152,9 +147,8 @@ def chat_with_agent(user_input: str) -> str:
         return "Retriever is not available. Please check FAISS index creation."
 
     # Retrieve relevant documents
-    # FIX: pass user_input directly (a string), not {"query": user_input}
-    docs = retriever.invoke(user_input)
-    docs = docs[:3]  # Limit to top 3 docs if desired
+    docs = search_similar_documents(vectorstore, docstore, user_input, score_threshold=0.75)
+
 
     # If no docs found, fallback to direct LLM
     if not docs:

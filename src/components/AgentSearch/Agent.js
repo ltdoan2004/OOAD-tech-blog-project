@@ -1,142 +1,187 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import Image from "next/image";
+import { extractLinks, removeLinks } from "./utils";
+
+// DotLottie
+import { DotLottiePlayer } from "@dotlottie/react-player";
+import "@dotlottie/react-player/dist/index.css";
 
 const Agent = () => {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { role: 'user', content: input };
+    const userMessage = { role: "user", sender: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
-    setInput('');
+    setInput("");
     setLoading(true);
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+      const backendUrl =
+        process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
       const response = await fetch(`${backendUrl}/api/chat`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
         body: JSON.stringify({ query: input }),
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Something went wrong');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || "Something went wrong");
       }
 
       const data = await response.json();
       const botMessage = {
-        role: 'bot',
-        content: removeLinks(data.response), // Remove links from the response content
-        links: extractLinks(data.response), // Extract links separately
+        role: "bot",
+        sender: "bot",
+        content: removeLinks(data.response),
+        links: extractLinks(data.response),
       };
       setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      console.error('Error:', error);
-      const errorMessage = {
-        role: 'bot',
-        content: 'Server error: Please check if backend is running.',
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+    } catch (err) {
+      setError(err.message);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "bot",
+          sender: "bot",
+          content: "Server error: Please check if backend is running.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
-  const extractLinks = (text) => {
-    const linkRegex = /-\s(.+?)\((\/[^)]+)\)/g;
-    const links = [];
-    let match;
-    while ((match = linkRegex.exec(text)) !== null) {
-      links.push({ title: match[1], url: match[2] });
-    }
-    return links;
-  };
-
-  const removeLinks = (text) => {
-    return text.replace(/-\s(.+?)\((\/[^)]+)\)/g, '').trim();
-  };
-
-  const renderLinks = (links) => {
-    if (!links || links.length === 0) return null;
-
+  const formatMessageWithLinks = (message) => {
     return (
-      <div className="mt-2">
-        <h4 className="text-sm font-bold">Relevant Links:</h4>
-        <ul className="list-disc list-inside">
-          {links.map((link, idx) => (
-            <li key={idx}>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 underline hover:text-blue-700"
-              >
-                {link.title}
-              </a>
-            </li>
-          ))}
-        </ul>
+      <div>
+        <p className="mb-2">{message.content}</p>
+        {message.links && message.links.length > 0 && (
+          <div className="mt-2 pt-2 border-t border-gray-600">
+            <p className="text-sm font-medium mb-1">Related Articles:</p>
+            <ul className="space-y-1">
+              {message.links.map((link, index) => (
+                <li key={index}>
+                  <a
+                    href={link.url}
+                    className="text-sm dark:text-dark text-white hover:text-blue-400 hover:underline underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.title || link.url}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     );
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <div className="bg-white rounded-lg shadow-lg">
-        <div className="p-4 border-b">
-          <h2 className="text-xl font-bold">Chat with TechBot</h2>
-        </div>
+    <div className="flex w-screen min-h-screen dark:bg-black bg-white dark:text-white text-black">
+      {/* 
+        Cột bên trái: 
+        - Animation nhỏ
+        - Dòng chữ “Tech bot” to & cách điệu
+      */}
+      <div className="w-1/3 h-full py-20 flex flex-col items-center justify-center p-2">
+        <DotLottiePlayer
+          src="/animation_llqd7ey4.lottie"
+          autoplay
+          loop
+          style={{ width: "50%", height: "50%" }}
+        />
+        <h2 className="mt-4 text-4xl font-extrabold italic tracking-wide">
+          Tech bot
+        </h2>
+      </div>
 
-        <div className="h-96 overflow-y-auto p-4">
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`mb-4 ${
-                msg.role === 'user' ? 'text-right' : 'text-left'
-              }`}
-            >
-              <div
-                className={`inline-block p-2 rounded-lg ${
-                  msg.role === 'user'
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-200 text-gray-800'
-                }`}
-              >
-                <p>{msg.content}</p>
-                {msg.role === 'bot' && renderLinks(msg.links)}
-              </div>
-            </div>
-          ))}
-          {loading && (
-            <div className="text-gray-500 text-center">
-              Processing your message...
-            </div>
-          )}
-        </div>
+      {/* Đường kẻ chia cột, dày 4px */}
+      <div className="w-[4px] bg-gray-700" />
 
-        <div className="p-4 border-t">
-          <div className="flex gap-2">
+      {/* 
+        Cột bên phải: Chat to hơn (chiều ngang rộng), 
+        sát đường kẻ hơn (pl-2), 
+        h vẫn 80vh. 
+      */}
+      <div className="flex-1 flex items-center justify-start pl-0 pr-4 ">
+        <div
+          className="w-[95%] h-[80vh] flex flex-col
+                     border-2 border-gray-600 
+                     bg-gray-900 text-white
+                     rounded-md shadow-lg"
+        >
+          {/* Danh sách tin nhắn */}
+          <div className="flex-1 overflow-y-auto p-4 bg-purple-100 dark:bg-yellow-100">
+            {messages.map((message, index) => {
+              const isBot = message.sender === "bot";
+              return (
+                <div
+                  key={index}
+                  className={`
+                    mb-3 max-w-[70%] p-3 rounded 
+                    ${
+                      isBot
+                        ? "bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light"
+                        : "bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light ml-auto"
+                    }
+                  `}
+                  style={{ clear: "both" }}
+                >
+                  <div
+                    className={`flex items-start gap-2 ${
+                      isBot ? "" : "flex-row-reverse text-right"
+                    }`}
+                  >
+                    <Image
+                      src={isBot ? "/bot_chat.webp" : "/user_chat.webp"}
+                      alt={`${message.sender} avatar`}
+                      width={24}
+                      height={24}
+                      className="rounded-full mt-1"
+                    />
+                    <div>
+                      <div className="font-semibold mb-1">
+                        {isBot ? "AI Assistant" : "You"}:
+                      </div>
+                      {formatMessageWithLinks(message)}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Input + Nút Send */}
+          <div className="p-4 border-t border-gray-700 flex items-center gap-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-              placeholder="Type your message..."
-              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+              placeholder="Type your message here..."
+              className="flex-1 p-2 rounded 
+                         border border-gray-600 bg-black text-white
+                         focus:outline-none focus:border-blue-400"
             />
             <button
               onClick={sendMessage}
               disabled={loading}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50"
+              className="px-4 py-2 rounded bg-purple-400 dark:bg-yellow-400 text-white dark:text-dark font-semibold
+                         hover:bg-yellow-400 active:bg-yellow-600"
             >
-              Send
+              {loading ? "Sending..." : "Send"}
             </button>
           </div>
         </div>
