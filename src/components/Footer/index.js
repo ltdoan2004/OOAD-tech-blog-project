@@ -68,9 +68,9 @@ const Footer = () => {
 
       <div className="mt-4">
         <img
-          src=""
-          alt="image"
-          className="w-32 h-auto rounded-lg"
+            src="/Cubs.webp" // image path
+            alt="Cubs"
+            className="w-64 h-auto rounded-lg"
         />
       </div>
 
