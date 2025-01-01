@@ -127,7 +127,7 @@ export default function BlogManager({ blogs }) {
                 className={`px-3 py-1 rounded-full text-sm transition-colors
                   ${selectedTags.includes(tag)
                     ? 'bg-purple-600 dark:bg-yellow-500 text-white dark:text-black'
-                    : 'bg-gray-200 dark:bg-gray-700 text-purple-700 dark:text-yellow-700 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    : 'bg-gray-200 dark:bg-gray-700 text-purple-700 dark:text-yellow-600 hover:bg-gray-300 dark:hover:bg-gray-600'
                   }`}
               >
                 #{tag}
@@ -137,7 +137,7 @@ export default function BlogManager({ blogs }) {
         </div>
 
         {/* Results count */}
-        <div className="text-sm text-purple-700 dark:text-yellow-700 ">
+        <div className="text-sm text-purple-600 dark:text-yellow-600 ">
           {filteredBlogs.length === blogs.length ? (
             `All ${blogs.length} blogs`
           ) : (
