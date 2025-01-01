@@ -1,17 +1,13 @@
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from typing import Optional
+from typing import Optional, List, Dict
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 import logging
-from langchain.schema import Document
-from langchain.retrievers import BM25Retriever
-from langchain.retrievers import EnsembleRetriever
-from typing import List, Dict, Tuple
-from operator import itemgetter
-from itertools import groupby
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
 # Setup logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -43,137 +39,203 @@ except Exception as e:
 def create_faiss_index(
     blogs_data: list,
     texts: list[str], 
-    metadatas: list[dict]
+    metadatas: list[dict],
+    save_path: str = "blog_index.faiss"
 ) -> Optional[FAISS]:
-    """Create or load FAISS index"""
-    index_dir = Path(__file__).parent
-    index_path = index_dir / "blog_index.faiss"
-
-    logger.info("Checking for existing FAISS index...")
-
-    # Try loading existing index
-    if index_path.exists():
-        try:
-            logger.info(f"Loading existing FAISS index from {index_path}")
-            return FAISS.load_local(str(index_path), embeddings, allow_dangerous_deserialization=True)
-        except Exception as e:
-            logger.error(f"Error loading FAISS index: {e}. Deleting corrupted index.")
-            index_path.unlink()  # Delete corrupted index
-
-    # Validate inputs
-    if not texts or not metadatas:
-        logger.error("Texts or metadatas are empty. Cannot create FAISS index.")
-        return None
-
-    # Create new index
+    """
+    Create and save FAISS index
+    
+    Args:
+        blogs_data: List of blog data
+        texts: List of text content to index
+        metadatas: List of metadata for each text
+        save_path: Path to the directory to save FAISS index
+        
+    Returns:
+        FAISS vectorstore object or None if creation fails
+    """
     try:
-        logger.info("Creating a new FAISS index...")
-        vectorstore = FAISS.from_texts(texts, embeddings, metadatas=metadatas)
-        vectorstore.save_local(str(index_path))
-        logger.info(f"FAISS index saved to {index_path}")
+        # Validate inputs
+        if not texts or not metadatas:
+            logger.error("Empty texts or metadatas provided")
+            return None
+            
+        if len(texts) != len(metadatas):
+            logger.error("Number of texts and metadatas must match")
+            return None
+
+        logger.info(f"Creating FAISS index with {len(texts)} documents...")
+        
+        # Create the vectorstore
+        vectorstore = FAISS.from_texts(
+            texts=texts,
+            embedding=embeddings,
+            metadatas=metadatas
+        )
+        
+        if not vectorstore:
+            logger.error("Failed to create vectorstore")
+            return None
+            
+        # Create directory if it doesn't exist
+        save_dir = Path(save_path)
+        save_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save the index
+        try:
+            vectorstore.save_local(str(save_dir))
+            logger.info(f"FAISS index saved successfully to directory: {save_dir}")
+        except Exception as save_error:
+            logger.error(f"Failed to save FAISS index: {save_error}")
+            # Even if save fails, return the in-memory index
+            return vectorstore
+        
         return vectorstore
+        
     except Exception as e:
         logger.error(f"Failed to create FAISS index: {e}")
         return None
 
-
-def hybrid_search(retriever, index, query_vector: np.ndarray, query: str, filters: Optional[Dict] = None, k: int = 5, score_threshold: float = 0.7):
+def load_faiss_index(load_path: str = "blog_index.faiss") -> Optional[FAISS]:
     """
-    Hybrid search function combining semantic and keyword-based retrieval.
-
+    Load FAISS index from disk
+    
     Args:
-        retriever: The retriever object capable of performing keyword searches.
-        index: FAISS index for semantic search.
-        query_vector: Precomputed vector for the query.
-        query: Search query string.
-        filters: Optional dictionary of filters to apply.
-        k: Number of results to return.
-        score_threshold: Minimum similarity score (0-1) for semantic results.
-
+        load_path: Path to the directory containing FAISS index
+        
     Returns:
-        List of unique documents sorted by relevance.
+        FAISS vectorstore object or None if loading fails
     """
-    if filters is None:
-        filters = {}
+    try:
+        index_dir = Path(load_path)
+        
+        # Check if directory exists and contains required files
+        if not index_dir.is_dir():
+            logger.error(f"Index directory not found at {index_dir}")
+            return None
+            
+        # Check for required files (index.faiss and index.pkl)
+        required_files = ["index.faiss", "index.pkl"]
+        missing_files = [f for f in required_files if not (index_dir / f).exists()]
+        
+        if missing_files:
+            logger.error(f"Missing required files in {index_dir}: {missing_files}")
+            return None
+            
+        logger.info(f"Loading FAISS index from directory: {index_dir}")
+        vectorstore = FAISS.load_local(
+            folder_path=str(index_dir),
+            embeddings=embeddings,
+            allow_dangerous_deserialization=True
+        )
+        
+        # Validate the loaded index
+        if not vectorstore or not hasattr(vectorstore, 'docstore'):
+            logger.error("Loaded index is invalid or corrupted")
+            return None
+            
+        doc_count = len(vectorstore.docstore._dict)
+        logger.info(f"FAISS index loaded successfully with {doc_count} documents")
+        return vectorstore
+        
+    except Exception as e:
+        logger.error(f"Failed to load FAISS index: {e}")
+        return None
 
-    # Semantic search using FAISS
-    semantic_results = search_similar_documents(index, query_vector, k=k, score_threshold=score_threshold)
-
-    # Keyword-based retrieval
-    keyword_results = retriever.retrieve(query, filters=filters, top_k=k)
-
-    # Combine results, remove duplicates, and sort by relevance
-    combined_results = semantic_results + [
-        {
-            "content": doc.page_content,
-            "metadata": doc.metadata,
-            "similarity_score": None  # No score for keyword-based results
-        }
-        for doc in keyword_results if doc.metadata['url'] not in {item['metadata']['url'] for item in semantic_results}
-    ]
-
-    # Sort combined results, prioritize semantic results by score
-    sorted_results = sorted(
-        combined_results,
-        key=lambda x: x["similarity_score"] if x["similarity_score"] is not None else 0,
-        reverse=True
-    )
-
-    return sorted_results[:k]
-
-
-def search_similar_documents(
-    vectorstore,
-    docstore: List[Dict],
+def search_documents(
+    vectorstore: FAISS,
     query: str,
     k: int = 5,
-    score_threshold: float = 0.8
+    score_threshold: float = 0.7
 ) -> List[Dict]:
     """
-    Perform semantic search using a FAISS index.
-
+    Search documents using FAISS's built-in similarity search.
+    
     Args:
-        vectorstore: FAISS index object.
-        docstore: List of documents with their metadata.
-        query: Search query string.
-        k: Number of results to return.
-        score_threshold: Minimum similarity score to include result.
-
+        vectorstore: FAISS vectorstore object
+        query: Search query string
+        k: Number of results to return
+        score_threshold: Minimum similarity score threshold
+        
     Returns:
-        List of documents with content, metadata, and similarity score.
+        List of documents with their similarity scores
     """
-    # Ensure the query is a single string
-    if not isinstance(query, str):
-        raise ValueError("Query must be a single string.")
-
-    query_vector = vectorstore.embedding_function.embed_query(query)
-    query_vector = np.array(query_vector).reshape(1, -1)  # Ensure query_vector is a 2D NumPy array
-    distances, indices = vectorstore.index.search(query_vector, k)
-
-    filtered_results = []
-    if len(distances) == 0 or len(indices) == 0:
-        return filtered_results
-
-    for dist, idx in zip(distances[0], indices[0]):
-        if idx == -1:  # Handle invalid indices
-            continue
-        normalized_score = 1 - (dist / 2)  # Normalize cosine similarity
-        if normalized_score >= score_threshold:
-            # Retrieve document from the docstore using the FAISS index
-            doc = docstore[idx]
-            filtered_results.append({
-                "content": doc["content"],
-                "metadata": doc["metadata"],
-                "similarity_score": normalized_score
-            })
-
-    return filtered_results
-
-
-
+    try:
+        if not vectorstore:
+            logger.error("No vectorstore provided")
+            return []
+            
+        if not query or not isinstance(query, str):
+            logger.error("Invalid query provided")
+            return []
+            
+        # Use FAISS's built-in similarity search with scores
+        docs_and_scores = vectorstore.similarity_search_with_score(query, k=k)
+        
+        # Process results
+        results = []
+        for doc, score in docs_and_scores:
+            # Convert distance to similarity score (FAISS returns L2 distance)
+            similarity_score = 1 / (1 + score)  # Convert distance to similarity (0-1 range)
+            
+            if similarity_score >= score_threshold:
+                results.append({
+                    "content": doc.page_content,
+                    "metadata": doc.metadata,
+                    "similarity_score": float(similarity_score)
+                })
+        
+        # Sort by similarity score
+        results.sort(key=lambda x: x["similarity_score"], reverse=True)
+        return results
+        
+    except Exception as e:
+        logger.error(f"Error during document search: {e}")
+        return []
 
 def get_retriever(vectorstore: FAISS, k: int = 3):
     """Get retriever from vectorstore"""
     if vectorstore is None:
         return None
     return vectorstore.as_retriever(search_kwargs={"k": k})
+
+def get_or_create_index(
+    blogs_data: Optional[list] = None,
+    texts: Optional[list[str]] = None,
+    metadatas: Optional[list[dict]] = None,
+    index_path: str = "blog_index.faiss"
+) -> Optional[FAISS]:
+    """
+    Get existing FAISS index or create a new one if it doesn't exist
+    
+    Args:
+        blogs_data: List of blog data (only needed for creation)
+        texts: List of text content (only needed for creation)
+        metadatas: List of metadata (only needed for creation)
+        index_path: Path to save/load the FAISS index
+        
+    Returns:
+        FAISS vectorstore object or None if both loading and creation fail
+    """
+    # First try to load existing index
+    vectorstore = load_faiss_index(index_path)
+    if vectorstore:
+        logger.info("Successfully loaded existing FAISS index")
+        return vectorstore
+        
+    # If loading fails and we have data, create new index
+    if texts and metadatas:
+        logger.info("No existing index found, creating new one...")
+        vectorstore = create_faiss_index(
+            blogs_data=blogs_data,
+            texts=texts,
+            metadatas=metadatas,
+            save_path=index_path
+        )
+        if vectorstore:
+            logger.info("Successfully created new FAISS index")
+            return vectorstore
+    else:
+        logger.error("No existing index found and no data provided to create new one")
+        
+    return None
