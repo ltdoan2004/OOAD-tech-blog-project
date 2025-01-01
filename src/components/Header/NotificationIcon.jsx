@@ -53,7 +53,7 @@ const NotificationIcon = () => {
   useEffect(() => {
     // Data với updatedAt
     const blogs = [
-      //{ title: "AI's Trust Problems", url: "http://localhost:3000/blogs/AI-problems", updatedAt: "2024-05-03", avatarUrl: "/blogs/AIproblem1.jpg" },
+      //{ title: "AI's Trust Problems", url: "http://localhost:3000/blogs/AIproblems", updatedAt: "2024-05-03", avatarUrl: "/blogs/AIproblem1.jpg" },
       { title: "Role of Nvidia Chips", url: "http://localhost:3000/blogs/NVIDIA-blog", updatedAt: "2024-02-29", avatarUrl: "/blogs/nvidia-2.jpg"},
       { title: "AI's 2024 Trends", url: "http://localhost:3000/blogs/AI-trends", updatedAt: "2025-01-01", avatarUrl: "/blogs/ai-trends-7.png" },
       { title: "Adding Search To Your Site In 15 Minutes", url: "http://localhost:3000/blogs/adding-search", updatedAt: "2022-07-14", avatarUrl: "/blogs/adding-seo.jpg" },
