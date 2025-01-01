@@ -165,7 +165,7 @@ export default function BlogPage({ params }) {
       </div>
     </article>
 
-    <Comment />
+    <Comment postId={params.slug} />
     </>
    
   );

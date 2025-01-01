@@ -5,6 +5,7 @@ import Header from "@/src/components/Header";
 import Footer from "../components/Footer";
 import siteMetadata from "../utils/siteMetaData";
 import Script from "next/script";
+import { AuthProvider } from '@/src/context/AuthContext';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -70,9 +71,11 @@ export default function RootLayout({ children }) {
     document.documentElement.classList.remove('dark')
   }`}
         </Script>
-        <Header />
-        {children}
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
