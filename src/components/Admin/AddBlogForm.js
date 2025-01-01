@@ -133,7 +133,7 @@ export default function AddBlogForm() {
             value={formData.title}
             onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
             className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 
-                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-yellow-100
+                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-dark
                      focus:ring-2 focus:ring-purple-500 dark:focus:ring-yellow-500"
             required
           />
@@ -148,7 +148,7 @@ export default function AddBlogForm() {
             value={formData.description}
             onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
             className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 
-                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-yellow-100
+                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-dark
                      focus:ring-2 focus:ring-purple-500 dark:focus:ring-yellow-500"
             rows={3}
             required
@@ -167,7 +167,7 @@ export default function AddBlogForm() {
               setFormData(prev => ({ ...prev, content: e.target.value }));
             }}
             className="w-full p-3 border rounded-lg font-mono bg-white dark:bg-gray-800 
-                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-yellow-100
+                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-dark
                      focus:ring-2 focus:ring-purple-500 dark:focus:ring-yellow-500"
             rows={15}
             required
@@ -184,7 +184,7 @@ export default function AddBlogForm() {
             value={formData.tags}
             onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
             className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 
-                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-yellow-100
+                     border-purple-300 dark:border-yellow-300 text-purple-900 dark:text-dark
                      focus:ring-2 focus:ring-purple-500 dark:focus:ring-yellow-500"
             required
           />
