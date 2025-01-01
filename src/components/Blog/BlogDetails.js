@@ -6,6 +6,7 @@ import { slug } from "github-slugger";
 import ViewCounter from "./ViewCounter";
 import Chatbot from './Chatbot';
 import { useEffect } from 'react';
+import Comment from './Comment';
 
 
 const BlogDetails = ({ blog, slug: blogSlug }) => {
@@ -22,7 +23,10 @@ const BlogDetails = ({ blog, slug: blogSlug }) => {
       <Link href={`/categories/${slug(blog.tags[0])}`} className="m-3">
         #{blog.tags[0]}
       </Link>
-      <div className="w-full mt-3"><Chatbot blogContent = {blog.body.raw} blogUrl={`http://localhost:3000/blogs/${blogSlug}`}/></div>
+      <div className="w-full mt-3">
+        <Chatbot blogContent={blog.body.raw} blogUrl={`http://localhost:3000/blogs/${blogSlug}`}/>
+        <Comment postId={blogSlug} />
+      </div>
     </div>
   );
 };
