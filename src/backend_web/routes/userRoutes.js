@@ -90,24 +90,29 @@ router.post("/login", async (req, res) => {
 // Tạo tài khoản Admin (tùy chọn)
 router.post("/create-admin", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
+    console.log("Creating admin with email:", email);
 
-    const existingAdmin = await User.findOne({ email });
-    if (existingAdmin) {
-      return res.status(400).json({ message: "Email đã được sử dụng." });
+    // Check if the user already exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    const newAdmin = new User({
-      name,
+    // Create a new admin user
+    user = new User({
       email,
       password,
-      isAdmin: true,
+      isAdmin: true
     });
 
-    await newAdmin.save();
-    res.status(201).json({ message: "Tạo tài khoản admin thành công!" });
+    // Save the user to the database
+    await user.save();
+    console.log("Admin user created successfully:", user);
+
+    res.status(201).json({ message: "Admin user created successfully" });
   } catch (err) {
-    console.error("Lỗi tạo admin:", err);
+    console.error("Error creating admin user:", err);
     res.status(500).json({ message: "Có lỗi xảy ra." });
   }
 });
