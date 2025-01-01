@@ -137,7 +137,7 @@ const Comment = ({ postId }) => {
             alt="Avatar"
             width={60}
             height={60}
-            className="bg-[#ff484214] rounded-full border border-yellow-500"
+            className="bg-[#ff484214] rounded-full border dark:border-yellow-500 border-purple-500"
           />
         </div>
 
@@ -148,30 +148,30 @@ const Comment = ({ postId }) => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             className={classNames(
-              "w-full rounded-md border border-[#919eab] focus:border-[#df062d] dark:bg-[#24292e] dark:text-white",
+              "w-full rounded-md border border-[#919eab] focus:border-purple-600 dark:focus:border-yellow-600 dark:bg-[#24292e] dark:text-white",
               styles.textarea
             )}
             rows={5}
           />
-          <div className="flex justify-between items-center mt-2">
+          <div className="flex justify-between  items-center mt-2">
             {user && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
                 Commenting as: {user.name}
               </p>
             )}
-            <label className="flex items-center text-sm">
+            <label className="flex items-center text-sm rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
               <input
                 type="checkbox"
                 checked={isAnonymous}
                 onChange={(e) => setIsAnonymous(e.target.checked)}
-                className="mr-2"
+                className="mr-2 dark:bg-yellow-200 bg-purple-200 "
               />
               Post anonymously
             </label>
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white disabled:opacity-50"
+              className="px-4 py-1.5 rounded text-sm cursor-pointer dark:bg-yellow-400 dark:text-black bg-purple-600 text-white disabled:opacity-50"
             >
               {loading ? "Posting..." : "Comment"}
             </button>
