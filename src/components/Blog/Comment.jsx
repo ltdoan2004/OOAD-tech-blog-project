@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import { formatDistance } from "date-fns";
 import { useAuth } from '@/src/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const CommentItem = ({ text, time, userName = "Unknown" }) => {
   return (
@@ -33,11 +34,17 @@ const CommentItem = ({ text, time, userName = "Unknown" }) => {
 };
 
 const Comment = ({ postId }) => {
+  const router = useRouter();
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(!user);
+
+  // Update isAnonymous when user state changes
+  useEffect(() => {
+    setIsAnonymous(!user);
+  }, [user]);
 
   // Fetch comments when component mounts
   useEffect(() => {
@@ -84,10 +91,9 @@ const Comment = ({ postId }) => {
       if (!isAnonymous && user) {
         const token = localStorage.getItem("x-auth-token");
         if (!token) {
-          throw new Error('No authentication token found');
+          throw new Error('Please log in to comment with your account');
         }
         headers["x-auth-token"] = token;
-        console.log('Sending request with token:', token);
       }
 
       const response = await fetch("http://localhost:5001/api/comments", {
@@ -96,6 +102,7 @@ const Comment = ({ postId }) => {
         body: JSON.stringify({
           postId,
           content: inputValue,
+          anonymous: isAnonymous
         }),
       });
 
@@ -105,13 +112,17 @@ const Comment = ({ postId }) => {
       }
 
       const data = await response.json();
-      console.log('Comment posted successfully:', data);
-      
       setComments((prev) => [data, ...prev]);
       setInputValue("");
     } catch (error) {
       console.error("Error posting comment:", error);
-      alert(error.message || "Error posting comment. Please try again.");
+      if (error.message.includes('Please log in')) {
+        if (confirm('Please log in to comment with your account. Go to login page?')) {
+          router.push('/login');
+        }
+      } else {
+        alert(error.message || "Error posting comment. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -133,7 +144,7 @@ const Comment = ({ postId }) => {
       <div className="flex gap-x-3">
         <div>
           <Image
-            src="/svgs/login.svg"
+            src={user ? "/svgs/user-avatar.svg" : "/svgs/login.svg"}
             alt="Avatar"
             width={60}
             height={60}
@@ -143,7 +154,7 @@ const Comment = ({ postId }) => {
 
         <form className="flex-1" onSubmit={handleSubmit}>
           <textarea
-            placeholder="Enter your comment"
+            placeholder={user ? "Enter your comment" : "Enter your comment (anonymous)"}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -153,21 +164,23 @@ const Comment = ({ postId }) => {
             )}
             rows={5}
           />
-          <div className="flex justify-between  items-center mt-2">
+          <div className="flex justify-between items-center mt-2">
             {user && (
               <p className="text-sm text-gray-500 rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
                 Commenting as: {user.name}
               </p>
             )}
-            <label className="flex items-center text-sm rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
-              <input
-                type="checkbox"
-                checked={isAnonymous}
-                onChange={(e) => setIsAnonymous(e.target.checked)}
-                className="mr-2 dark:bg-yellow-200 bg-purple-200 "
-              />
-              Post anonymously
-            </label>
+            {user && (
+              <label className="flex items-center text-sm rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
+                <input
+                  type="checkbox"
+                  checked={isAnonymous}
+                  onChange={(e) => setIsAnonymous(e.checked)}
+                  className="mr-2 dark:bg-yellow-200 bg-purple-200"
+                />
+                Post anonymously
+              </label>
+            )}
             <button
               type="submit"
               disabled={loading}

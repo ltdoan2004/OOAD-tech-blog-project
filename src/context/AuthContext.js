@@ -9,15 +9,32 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
+    const autoLogin = async () => {
       const token = localStorage.getItem("x-auth-token");
       if (token) {
         try {
-          const decoded = jwtDecode(token);
-          console.log("Decoded token:", decoded);
-          setUser(decoded);
+          // Verify token with backend
+          const response = await fetch('http://localhost:5001/api/users/verify', {
+            headers: {
+              'x-auth-token': token
+            }
+          });
+
+          if (response.ok) {
+            const decoded = jwtDecode(token);
+            setUser({
+              id: decoded.id,
+              name: decoded.name,
+              email: decoded.email,
+              isAdmin: decoded.isAdmin
+            });
+          } else {
+            // If token is invalid, clear it
+            localStorage.removeItem("x-auth-token");
+            setUser(null);
+          }
         } catch (error) {
-          console.error("Token decode error:", error);
+          console.error("Auto login error:", error);
           localStorage.removeItem("x-auth-token");
           setUser(null);
         }
@@ -25,7 +42,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
     };
 
-    checkAuth();
+    autoLogin();
   }, []);
 
   const login = async (token) => {
