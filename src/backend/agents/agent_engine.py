@@ -19,8 +19,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if project_root not in sys.path:
     sys.path.append(project_root)
 
-from services import create_faiss_index, get_retriever, search_similar_documents
-
+from services import create_faiss_index, get_retriever, search_documents, load_faiss_index, get_or_create_index
 import tiktoken
 
 def count_tokens(prompt, model="gpt-3.5-turbo"):
@@ -69,7 +68,7 @@ def prepare_blog_texts(blogs):
     for blog in blogs:
         # -------------- FIX: Ensure raw_content is a string ---------------
         raw_content = blog['body'].get('raw', '')
-
+        print(blog['title'])
         if not isinstance(raw_content, str):
             # Convert dict or list to string so we don't break the embedding function
             raw_content = json.dumps(raw_content)
@@ -96,7 +95,8 @@ docstore = [
     {"content": text, "metadata": metadata} 
     for text, metadata in zip(texts, metadatas)
 ]
-vectorstore = create_faiss_index(blogs_data=blogs, texts=texts, metadatas=metadatas)
+# vectorstore = create_faiss_index(blogs_data=blogs, texts=texts, metadatas=metadatas,save_path='/Users/doa_ai/Developer/OOAD-tech-blog-project/blog_index.faiss')
+vectorstore = get_or_create_index(index_path="/Users/doa_ai/Developer/OOAD-tech-blog-project/blog_index.faiss")
 retriever = get_retriever(vectorstore)
 if retriever is None:
     raise RuntimeError("Failed to initialize retriever. Check FAISS index creation.")
@@ -147,7 +147,12 @@ def chat_with_agent(user_input: str) -> str:
         return "Retriever is not available. Please check FAISS index creation."
 
     # Retrieve relevant documents
-    docs = search_similar_documents(vectorstore, docstore, user_input, score_threshold=0.75)
+    docs = search_documents(
+    vectorstore=vectorstore,
+    query=user_input,
+    k=5,  # number of results
+    score_threshold=0.7  # minimum similarity score
+    )
 
 
     # If no docs found, fallback to direct LLM
@@ -177,7 +182,7 @@ def chat_with_agent(user_input: str) -> str:
 # 8. Entry Point
 # -----------------------------------------------------------------------------
 def main():
-    user_input = "What is the best way to learn Python?"
+    user_input = "I want to talk about the multimodal?"
     print(chat_with_agent(user_input))
 
 if __name__ == "__main__":

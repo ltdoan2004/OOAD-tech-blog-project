@@ -5,6 +5,9 @@ import Image from "next/image";
 import React, { useState } from "react";
 import styles from "./index.module.css";
 import { formatDistance } from "date-fns";
+import { useAuth } from '@/src/context/AuthContext';
+import { useRouter } from 'next/navigation';
+
 
 const CommentItem = ({ text, time }) => {
   return (
@@ -31,10 +34,18 @@ const CommentItem = ({ text, time }) => {
   );
 };
 
-const Comment = () => {
+const Comment = ({ postId }) => {
+  const router = useRouter();
+  const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(!user);
 
+  // Update isAnonymous when user state changes
+  useEffect(() => {
+    setIsAnonymous(!user);
+  }, [user]);
   const handleSubmit = (event) => {
     event.preventDefault(); // Ngăn reload trang
     if (inputValue.trim() === "") return; 
@@ -44,8 +55,77 @@ const Comment = () => {
       time: new Date().toISOString(), // Lưu thời gian thực
     };
 
-    setComments((prev) => [...prev, newComment]);
-    setInputValue(""); 
+  const fetchComments = async () => {
+    try {
+      console.log('Fetching comments for postId:', postId); // Debug log
+      const response = await fetch(`http://localhost:5001/api/comments/${postId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log('Fetched comments:', data); // Debug log
+      setComments(data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      setComments([]);
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (inputValue.trim() === "") return;
+    setLoading(true);
+
+    try {
+      const headers = {
+        "Content-Type": "application/json",
+      };
+
+      // Add token if user is logged in and not posting anonymously
+      if (!isAnonymous && user) {
+        const token = localStorage.getItem("x-auth-token");
+        if (!token) {
+          throw new Error('Please log in to comment with your account');
+        }
+        headers["x-auth-token"] = token;
+      }
+
+      const response = await fetch("http://localhost:5001/api/comments", {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          postId,
+          content: inputValue,
+          anonymous: isAnonymous
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to post comment');
+      }
+
+      const data = await response.json();
+      setComments((prev) => [data, ...prev]);
+      setInputValue("");
+    } catch (error) {
+      console.error("Error posting comment:", error);
+      if (error.message.includes('Please log in')) {
+        if (confirm('Please log in to comment with your account. Go to login page?')) {
+          router.push('/login');
+        }
+      } else {
+        alert(error.message || "Error posting comment. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -64,7 +144,7 @@ const Comment = () => {
       <div className="flex gap-x-3">
         <div>
           <Image
-            src="/logo.webp"
+            src={user ? "/svgs/user-avatar.svg" : "/svgs/login.svg"}
             alt="Avatar"
             width={60}
             height={60}
@@ -74,7 +154,7 @@ const Comment = () => {
 
         <form className="flex-1" onSubmit={handleSubmit}>
           <textarea
-            placeholder="Enter your comment"
+            placeholder={user ? "Enter your comment" : "Enter your comment (anonymous)"}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown} 
@@ -84,15 +164,33 @@ const Comment = () => {
             )}
             rows={5}
           />
-          <button
-            type="submit"
-            className="ml-auto block mt-2 px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white"
-          >
-            Comment
-          </button>
+          <div className="flex justify-between items-center mt-2">
+            {user && (
+              <p className="text-sm text-gray-500 rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
+                Commenting as: {user.name}
+              </p>
+            )}
+            {user && (
+              <label className="flex items-center text-sm rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
+                <input
+                  type="checkbox"
+                  checked={isAnonymous}
+                  onChange={(e) => setIsAnonymous(e.checked)}
+                  className="mr-2 dark:bg-yellow-200 bg-purple-200"
+                />
+                Post anonymously
+              </label>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-4 py-1.5 rounded text-sm cursor-pointer dark:bg-yellow-400 dark:text-black bg-purple-600 text-white disabled:opacity-50"
+            >
+              {loading ? "Posting..." : "Comment"}
+            </button>
+          </div>
         </form>
       </div>
-
       <div className="mt-4 flex flex-col gap-y-4">
         {comments.map((comment, index) => (
           <CommentItem key={index} text={comment.text} time={comment.time} />

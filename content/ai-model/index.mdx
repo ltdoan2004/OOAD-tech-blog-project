@@ -1,0 +1,247 @@
+---
+title: "Using Multimodal AI Models For Your Applications (Part 3)"
+description: In this third and final installment, you are looking at two models that handle all three modalities — text, images or videos, and audio — without needing a second model for text-to-speech or speech recognition.
+image: "../../public/blogs/ai-model(edited).png"
+publishedAt: "2024-10-11"
+updatedAt: "2024-10-11"
+author: "Joas Pambou"
+isPublished: true
+tags: 
+- AI
+- Tools
+---
+
+In this third and final part of a [three-part series](https://www.smashingmagazine.com/2024/07/integrating-image-to-text-and-text-to-speech-models-part1/), we’re taking a more streamlined approach to an application that supports vision-language (VLM) and text-to-speech (TTS). This time, we’ll use different models that are designed for all three modalities — images or videos, text, and audio (including speech-to-text) — in one model. These “any-to-any” models make things easier by allowing us to avoid switching between models.
+
+> You’ve covered a lot with Joas Pambou so far in this series. In [Part 1](https://www.smashingmagazine.com/2024/07/integrating-image-to-text-and-text-to-speech-models-part1/), you built a system using a vision-language model (VLM) and a text-to-speech (TTS) model to create audio descriptions of images. In [Part 2](https://www.smashingmagazine.com/2024/08/integrating-image-to-text-and-text-to-speech-models-part2/), you improved the system by using LLaVA and Whisper, which provided audio descriptions of images. In this third and final installment, you are looking at two models that handle all three modalities — text, images or videos, and audio — without needing a second model for text-to-speech or speech recognition.
+
+Specifically, we’ll focus on two powerful models: **Reka** and **Gemini 1.5 Pro**.
+
+Both models take things to the next level compared to the tools we used earlier. They eliminate the need for separate speech recognition models, providing a unified solution for multimodal tasks. With this in mind, our goal in this article is to explore how Reka and Gemini simplify building advanced applications that handle images, text, and audio all at once.
+
+
+---
+
+## Overview Of Multimodal AI Models
+
+The architecture of multimodal models has evolved to enable seamless handling of various inputs, including text, images, and audio, among others. Traditional models often require separate components for each modality, but recent advancements in “any-to-any” models like [Next-GPT](https://next-gpt.github.io/) or [4M](https://machinelearning.apple.com/research/massively-multimodal) allow developers to build systems that process multiple modalities within a unified architecture.
+
+[Gato](https://deepmind.google/discover/blog/a-generalist-agent/), for instance, utilizes a 1.2 billion parameter decoder-only transformer architecture with 24 layers, embedding sizes of 2048 and a hidden size of 8196 in its feed-forward layers. This structure is optimized for general tasks across various inputs, but it still relies on extensive task-specific fine-tuning.
+
+[GPT-4o](https://openai.com/index/hello-gpt-4o/), on the other hand, takes a different approach with training on multiple media types within a single architecture. This means it’s a single model trained to handle a variety of inputs (e.g., text, images, code) without the need for separate systems for each. This training method allows for smoother task-switching and better generalization across tasks.
+
+Similarly, [CoDi](https://codi-gen.github.io/) employs a multistage training scheme to handle a linear number of tasks while supporting input-output combinations across different modalities. CoDi’s architecture builds a shared multimodal space, enabling synchronized generation for intertwined modalities like video and audio, making it ideal for more dynamic multimedia tasks.
+
+Most “any-to-any” models, including the ones we’ve discussed, rely on a few key concepts to handle different tasks and inputs smoothly:
+
+- **Shared representation space**
+  
+  These models convert different types of inputs — text, images, audio — into a common feature space. Text is encoded into vectors, images into feature maps, and audio into spectrograms or embeddings. This shared space allows the model to process various inputs in a unified way.
+- **Attention mechanisms**
+
+  Attention layers help the model focus on the most relevant parts of each input, whether it’s understanding the text, generating captions from images, or interpreting audio.
+- **Cross-modal interaction**
+
+  In many models, inputs from one modality (e.g., text) can guide the generation or interpretation of another modality (e.g., images), allowing for more integrated and cohesive outputs.
+- **Pre-training and fine-tuning**
+
+  Models are typically pre-trained on large datasets across different types of data and then fine-tuned for specific tasks, enhancing their performance in real-world applications.
+
+## Reka Models 
+
+[Reka](https://www.reka.ai/) is an AI research company that helps developers build powerful applications by offering models for a range of tasks. These tasks include generating text from videos and images, translating speech, and answering complex questions from long multimodal documents. Reka’s models can even write and execute code, providing flexible, real-world solutions for developers.
+
+These are the three main models Reka offers:
+
+  1. **Reka Core**
+
+A 67-billion-parameter multimodal language model designed for complex tasks. It supports inputs like images, videos, and texts while excelling in advanced reasoning and coding.
+ 
+  2. **Reka Flash**
+
+A faster model with a 21-billion-parameter, designed for flexibility and rapid performance in multimodal settings.
+ 
+  3. **Reka Edge** (PDF)
+
+A smaller 7-billion-parameter model was built for on-device and low-latency applications, making it efficient for local use and local or latency-sensitive applications.
+
+Reka’s models can be fine-tuned and deployed securely, whether on the cloud, on-premises, or even on-device. Let’s start by testing Reka’s capabilities directly through its [playground](https://chat.reka.ai/chat). This allows us to experiment with its multimodal features without writing any code, providing a hands-on way to see how the models handle various tasks, such as image and video comprehension.
+
+Alright, we’ll kick things off by uploading an image of a diagram outline of the **PaliGemma architecture** and ask Reka for a detailed explanation.
+
+> Can you provide a more detailed explanation of this image?
+
+<Image
+  src="/blogs/ai-model.png"
+  width="860"
+  height="404"
+  alt="Image"
+  sizes="100vw"
+/>
+📸  _[(Large preview)](https://files.smashing.media/articles/using-multimodal-ai-models-applications-part3/1-diagram-outline-reka-explanation.png)_
+
+Here’s what we get from Reka Core:
+
+> “This image is a schematic representation of a machine-learning model named PaliGemma. The model appears to be designed for multimodal input, combining both image and text data. At the top, there are two input sources: ‘Image Input’ and ‘Text Input’. The image input is processed by a ‘SigLIP Image Encoder’, which likely stands for a specific type of image encoding technique. The output of this encoder is then subjected to a ‘Linear Projection’, which is a common step in machine learning to transform data into a lower-dimensional space. The text input is directly fed into the model. Both the projected image data and the text input are then concatenated into ‘Concatenated Tokens’, which are then processed by a component labeled ‘Gemma’. The final output of the model is ‘Text Output’, which suggests that the model is designed to generate text based on the input data.”
+
+It’s a clear and detailed breakdown of the PaliGemma architecture. The model accurately identifies image and text inputs, the [SigLIP image encoder](https://huggingface.co/docs/transformers/main/en/model_doc/siglip), and the linear projection step. It also grasps how the image and text inputs are combined and processed to generate text output. I should admit that the response is quite neat, offering a solid explanation of the architecture.
+
+Let’s try a video input instead. We’ll upload the video about [Genny](https://www.gennyapp.com/), a software, and ask a question to see how well Reka Core handles video comprehension.
+
+> What is this video about?
+
+> “This video is a screen recording of a group of friends discussing their plans for the weekend.”
+
+Well, it’s not a good answer compared to [what LLaVA gave us in the previous article](https://www.smashingmagazine.com/2024/08/integrating-image-to-text-and-text-to-speech-models-part2/#visual-instruction-tuning-and-llava). Now let’s try a longer video, but with the Reka Flash model. The video is about a TTS model called [Parler TTS](https://github.com/huggingface/parler-tts). Instead of asking what the video is about, let’s prompt it like this:
+
+> I’m an AI developer, and I’m not sure how this TTS model can help me in my projects. Can you explain how I can use it or what it’s useful for?
+
+<Image
+  src="/blogs/ai-model-1.png"
+  width="860"
+  height="404"
+  alt="Image"
+  sizes="100vw"
+/>
+📸  _[(Large preview)](https://files.smashing.media/articles/using-multimodal-ai-models-applications-part3/2-reka-flash-answer.png)_
+
+Reka Flash generates a solid answer this time:
+
+> “Of course! This TTS (Text-to-Speech) model can be incredibly useful for developers, especially those working on projects that involve creating more human-like interactions or providing audio feedback to users. Here are some ways you can leverage this TTS model in your projects:
+> 1. Accessibility: TTS models can greatly enhance the accessibility of your applications for users with visual impairments or reading difficulties. By providing spoken feedback or narrating content, you can make your applications more inclusive
+> 2. Voice Assistants: You can integrate this TTS model into voice assistants or chatbots, allowing them to generate more natural-sounding responses. This can improve user experience and make interactions with your bots more engaging.
+> 3. Multimedia Applications: This TTS model can be used in multimedia applications, such as e-books, educational tools, or games, to provide spoken narration or instructions. This can make the content more engaging and easier to understand.
+> 4. Audio Notifications: You can use the TTS model to generate audio notifications for your applications, providing users with spoken alerts or reminders. This can be particularly useful for users who may not always have their screens visible.
+> 5. Language Learning: The TTS model can be used in language learning applications to provide users with correct pronunciation and intonation. It can also generate spoken feedback or narrate lessons, making the learning process more immersive.
+> 6. Audio Books: You can use the TTS model to generate audio books, allowing users to listen to written content instead of reading it. This can be especially helpful for users who prefer auditory learning or have difficulty reading.
+> 7. Explainer Videos: The TTS model can be used to generate voiceovers for explainer videos, providing users with spoken narration that explains the content on the screen. This can make the content more engaging and easier to understand.
+> 8. Audio Feedback: You can use the TTS model to generate audio feedback for users in your applications, such as confirming actions, providing instructions, or giving feedback on their performance. This can make the interactions more natural and intuitive.
+>
+> In summary, the TTS model can be a valuable tool for developers looking to create more human-like interactions, improve accessibility, and enhance the user experience in various applications.”
+
+It’s a good answer that’s informative and quite practical for developers. Let’s compare what happens when we try the Reka Edge model with a PDF input titled “Meta AI — Responsible Use Guide” [(PDF)](https://github.com/Meta-Llama/llama/blob/main/Responsible-Use-Guide.pdf).
+
+> As an AI developer, how can I ensure that I am following the responsible AI guidelines outlined in this document?
+
+>“To ensure that your use of AI aligns with the principles outlined in this guide, you can follow these steps and best practices:
+> 1. Familiarize yourself with the principles of responsible AI, such as transparency, accountability, and user empowerment, as outlined in the guide.
+> 2. Understand the potential impacts of AI on users and society, and be aware of the risks and challenges associated with the development and deployment of AI systems.
+> 3. Embrace an iterative model-development mindset, continuously striving for improvement and learning from feedback and errors.
+> 4. Build a responsible AI ecosystem by working with partners, experts, and communities to develop and share best practices, tools, and benchmarking resources.
+> 5. Follow the guidelines and best practices outlined in the guide for each stage of model development, from data collection and preparation to fine-tuning, evaluation, and deployment.
+> 6. Consider the specific use case and requirements for your AI system, and tailor your approach accordingly.
+> 7. Regularly monitor and evaluate the performance and safety of your AI system and make adjustments as needed to ensure it aligns with the principles outlined in the guide.
+> 8. Be transparent and accountable in your interactions with users and stakeholders, and be open to feedback and suggestions for improvement.
+> 9. Stay informed about the latest developments and research in the field of AI, and be prepared to adapt your approach as needed to address new challenges and opportunities.
+> 10. Follow the specific guidelines and best practices outlined in the addendum for Code Llama, such as defining content policies, evaluating and benchmarking models, and addressing input- and output-level risks.”
+
+Reka Edge’s answer is quite thorough and detailed, too!
+
+If you want to dive into coding, start by [creating a Reka account](https://chat.reka.ai/auth/login?client_id=&connection=&lang=en-US%2Cen%3Bq%3D0.9%2Cvi-VN%3Bq%3D0.8%2Cvi%3Bq%3D0.7&error=invalid_request&error_description=You%20may%20have%20pressed%20the%20back%20button%2C%20refreshed%20during%20login%2C%20opened%20too%20many%20login%20dialogs%2C%20or%20there%20is%20some%20issue%20with%20cookies%2C%20since%20we%20couldn%27t%20find%20your%20session.%20Try%20logging%20in%20again%20from%20the%20application%20and%20if%20the%20problem%20persists%20please%20contact%20the%20administrator.&tracking=7caabb793bb7aa7f6331) and getting an API key. Then you can follow along with this [notebook](https://colab.research.google.com/github/reka-ai/colab/blob/main/reka_demo.ipynb#scrollTo=8bf9f004). Try out their Python SDK, and make sure to explore the different [models available](https://docs.reka.ai/available-models). It’s a great way to see how these tools work under the hood!
+
+## Gemini Models
+
+[Gemini 1.5](https://blog.google/technology/ai/google-gemini-next-generation-model-february-2024/), developed by [Google DeepMind](https://deepmind.google/about/), is designed to handle complex tasks efficiently, thanks to the new Mixture-of-Experts (MoE) system. MoE is like packing several specialized models inside one big model. Instead of using the whole network for every task, Gemini 1.5 activates only the parts (or what they call “experts”) that are most relevant. This means Gemini 1.5 can tackle complex tasks with less processing power than a typical monolithic model.
+
+We can explore Gemini’s features in [Google AI Studio](https://ai.google.dev/aistudio) since it’s already baked right in. We’ll begin by uploading the following image illustrating VLM capabilities.
+
+<Image
+  src="/blogs/ai-model-2.jpeg"
+  width="860"
+  height="404"
+  alt="Image"
+  sizes="100vw"
+/>
+📸  _[(Large preview)](https://files.smashing.media/articles/using-multimodal-ai-models-applications-part3/3-vision-language-model.jpeg)_
+
+We’ll ask Gemini to analyze the image and extract details or concepts:
+
+> Explain this image. What are the specific details or concepts it represents?
+
+> “The image is a flowchart illustrating different types of image understanding tasks with a Vision Language Model.
+> - **Object Localization**: This task aims to identify the precise location of objects within an image. The example question asks, “Is one cat behind another?”
+> - **Zero-shot Segmentation**: This task involves segmenting an image into different regions based on a given label, even if the model has never seen that specific label before. The example question asks to segment “striped cat.”
+> - **Zero-shot Visual QA**: This task requires answering questions about an image, even if the model has not been specifically trained to answer that type of question. The example question asks, “What is the breed of these cats?”
+> - **One-shot Learning with Instructions**: This task involves providing the model with a single example and instruction to learn a new concept and apply it to other images. The example question asks, “Striped cats are called tabby cats. What is the breed of the cats in the image?”
+
+Well, Gemini nailed it — it clearly understood the image and recognized the tasks a VLM handles. This is exactly what you’d expect from a model designed for advanced image analysis.
+
+Now, we’ll upload another image — this time of an Italian dish — and ask Gemini if it can recognize the dishes and list the ingredients needed for them. This type of “food recognition task” will help us test its ability to identify foods and ingredients.
+
+<Image
+  src="/blogs/ai-model-3.png"
+  width="860"
+  height="404"
+  alt="Image"
+  sizes="100vw"
+/>
+📸  _[(Large preview)](https://files.smashing.media/articles/using-multimodal-ai-models-applications-part3/4-italian-food.png)_
+
+> List the different dishes in this image, also from which country, and give me the ingredients I need to make them.
+
+> “The image shows an Italian feast with the following dishes:
+> 1. **Seafood Stew**: A rich and flavorful stew with seafood like clams, mussels, shrimp, fish, and vegetables in a tomato broth.
+> 2. **Spaghetti with Tomato Sauce**: Classic spaghetti pasta tossed in a simple yet flavorful tomato sauce.
+> 3. **Meatballs in Tomato Sauce**: Tender and juicy meatballs simmered in a rich tomato sauce.
+> 4. **Lasagna**: Layered pasta with meat sauce, cheese, and tomato sauce.
+> 5. **Side Salad**: A refreshing side salad with mixed greens, tomatoes, and other vegetables.
+> 6. **Garlic Bread**: Toasted bread slices rubbed with garlic and olive oil.
+> 7. **Marinara Sauce**: A simple tomato-based sauce.
+>
+>This is a typical Italian meal with various dishes showcasing the flavors of Italian cuisine.
+>
+>As for the ingredients, you’ll need tomatoes for many of these dishes, specifically for the sauces and the side salad.”
+
+Well, the model did a good job recognizing the dishes, but it also didn’t give me all the necessary ingredients. Let’s see how it does with videos instead, using the same video we used earlier with the Reka models. This time, the task will focus on **action recognition**.
+
+> What is the purpose of this video, and what key actions or processes are being demonstrated?
+
+> “The video is a tutorial about the importance of friendship and how it can impact our lives. It demonstrates the use of a video editing software called “Genmy” to create a video and add text subtitles. The video creator is using Genmy to:
+>- **Record their voice**: This is seen at the top of the screen with the mic icon.
+>- **Add text to speech**: You see the “Text to Speech” option, which is likely being used to generate subtitles or captions for the video.
+>- **Edit the timeline**: They’re working with a video timeline, adding and arranging different elements.
+>- **Add voice-over**: The speaker is adding commentary to the video.
+>- **Create a visually appealing presentation**: They’re using a combination of video footage, text, and voice-over to create an engaging tutorial.”
+
+Well, Gemini gave a clear breakdown of the video, identifying it as a tutorial demonstrating the [Genmy video editing software](https://www.genmy.ai/) to highlight how it’s used for recording voice, adding text-to-speech, editing video timelines, and allowing voice-over. Impressive!
+
+Let’s upload one more video, the same one we used for Reka about the Parler TTS model, and ask Gemini to **analyze and summarize** the contents.
+
+>Summarize this video and explain how the contents might be relevant or helpful for software engineers.
+
+> “This video showcases different voice samples generated by a text-to-speech (TTS) system called “Parler-TTS.” The video highlights various voice characteristics like gender, pace, pitch, and even the simulated environment. For software engineers, this video demonstrates the progress made in TTS technology. These are some insights:
+> - **Voice Variety**: The video shows that Parler-TTS can create diverse voices, potentially useful for applications needing different personas or tones.
+> - **Fine-grained Control**: The video emphasizes the ability to control voice parameters like pace and pitch, showcasing the potential for customizability.
+> - **Quality and Naturalness**: The video focuses on the quality of the generated speech, demonstrating the advancements made in speech synthesis, which is crucial for user experience.”
+
+Nicely done! I can go with that answer. Gemini explains adjusting voice settings, like pitch and speed, and how having different voices can be useful. Gemini also emphasizes the importance of natural, high-quality speech, which is handy for developers working with TTS systems!
+
+Alright, for coding, you can grab the code from Google AI Studio by clicking the **Get Code** button. You can choose between formatting the code in Python, Swift, and Java, among other languages.
+
+<Image
+  src="/blogs/ai-model-4.png"
+  width="860"
+  height="404"
+  alt="Image"
+  sizes="100vw"
+/>
+📸  _[(Large preview)](https://files.smashing.media/articles/using-multimodal-ai-models-applications-part3/5-gemini-api.png)_
+
+## Conclusion
+
+Both Reka and Gemini are strong multimodal models for AI applications, but there are key differences between them to consider. Here’s a table that breaks those down:
+
+| Feature               | Reka       | Gemini 1.5           |
+| ----------------------- | ------------ | ------------------ |
+| **Multimodal Capabilities**  | Image, video, and text processing  | Image, video, text, with extended token context      |
+| **Efficiency** | Optimized for multimodal tasks     	| 	Built with MoE for efficiency |
+| **Context Window**           | Standard token window | Up to two million tokens (with Flash variant)         | 
+| **Architecture**                   | 	Focused on multimodal task flow | MoE improves specialization         |
+| **Training/Serving**           | High performance with efficient model switching | More efficient training with MoE architecture       |
+| **Deployment**          | 	Supports on-device deployment | 	Primarily cloud-based, with Vertex AI integration        |
+| **Use Cases**                  | 	Interactive apps, edge deployment  | Suited for large-scale, long-context applications         |
+| **Languages Supported**           | Multiple languages | 	Supports many languages with long context windows       |
+
+**Reka** stands out for on-device deployment, which is super useful for apps requiring offline capabilities or low-latency processing.
+
+On the other hand, **Gemini 1.5 Pro** shines with its long context windows, making it a great option for handling large documents or complex queries in the cloud.
