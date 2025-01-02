@@ -60,6 +60,7 @@ const NotificationIcon = () => {
       { title: "Apple promised next-gen CarPlay in 2024", url: "http://localhost:3000/blogs/apple-car", updatedAt: "2024-12-31", avatarUrl: "/blogs/apple-car(edited-ver2).jpg" },
       { title: "Automating Repetitive Tasks", url: "http://localhost:3000/blogs/automating-repetitive-tasks-productivity-hacks-for-developers", updatedAt: "2023-01-01", avatarUrl: "/blogs/emile-perron-xrVDYZRGdw4-unsplash.jpg" },
       { title: "Building Progressive Web Apps", url: "http://localhost:3000/blogs/building-progressive-web-apps-bridging-the-gap-between-web-and-mobile", updatedAt: "2023-01-04", avatarUrl: "/blogs/adding-seo-1.jpg" },
+      { title: "Best Buy ASUS Monitors 2024", url: "http://localhost:3000/blogs/ASUS-monitor", updatedAt: "2023-10-29", avatarUrl: "/blogs/asus-1.jpg" },
     ];
 
     // Sắp xếp bài viết và cập nhật state
