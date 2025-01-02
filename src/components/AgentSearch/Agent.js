@@ -42,8 +42,8 @@ const Agent = () => {
       const botMessage = {
         role: "bot",
         sender: "bot",
-        content: removeLinks(data.response),
-        links: extractLinks(data.response),
+        content: data.response,
+        links: data.links
       };
       setMessages((prev) => [...prev, botMessage]);
     } catch (err) {

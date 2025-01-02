@@ -1,6 +1,6 @@
-from agents import chat_with_agent  # Use relative import
+from agents.agent_engine import chat_with_agent
 
-def process_user_query(user_input: str) -> str:
+def process_user_query(user_input: str) -> dict:
     """
     Process the user's input using the LangChain agent.
     
@@ -8,11 +8,14 @@ def process_user_query(user_input: str) -> str:
         user_input (str): The query from the user.
     
     Returns:
-        str: The agent's response.
+        dict: The agent's response containing content and links
     """
     try:
         response = chat_with_agent(user_input)
-        return response
+        return response  # Already contains {"content": str, "links": list}
     except Exception as e:
         print(f"Error processing user query: {e}")
-        return "Sorry, there was an error processing your request. Please try again later."
+        return {
+            "content": "Sorry, there was an error processing your request. Please try again later.",
+            "links": []
+        }

@@ -91,13 +91,34 @@ def prepare_blog_texts(blogs):
 # -----------------------------------------------------------------------------
 blogs = load_blog_data()
 texts, metadatas = prepare_blog_texts(blogs)
-docstore = [
-    {"content": text, "metadata": metadata} 
-    for text, metadata in zip(texts, metadatas)
-]
-# vectorstore = create_faiss_index(blogs_data=blogs, texts=texts, metadatas=metadatas,save_path='/Users/doa_ai/Developer/OOAD-tech-blog-project/blog_index.faiss')
-vectorstore = get_or_create_index(index_path="/Users/doa_ai/Developer/OOAD-tech-blog-project/blog_index.faiss")
-retriever = get_retriever(vectorstore)
+index_path = "/Users/doa_ai/Developer/OOAD-tech-blog-project/blog_index.faiss"
+
+# Only create new index if we have data
+if texts and metadatas:
+    try:
+        # Try to load existing index first
+        vectorstore = load_faiss_index(folder_path=index_path)
+        print("Loaded existing FAISS index")
+    except Exception as e:
+        print(f"Creating new FAISS index: {e}")
+        # Create new index if loading fails
+        vectorstore = create_faiss_index(
+            blogs_data=blogs,
+            texts=texts,
+            metadatas=metadatas,
+            save_path=index_path
+        )
+else:
+    raise RuntimeError("No blog data available to create index")
+
+# Create retriever from vectorstore
+if vectorstore is not None:
+    retriever = vectorstore.as_retriever(
+        search_kwargs={"k": 5}
+    )
+else:
+    raise RuntimeError("Failed to initialize vectorstore")
+
 if retriever is None:
     raise RuntimeError("Failed to initialize retriever. Check FAISS index creation.")
 
@@ -106,14 +127,22 @@ if retriever is None:
 # 5. Define Optimized Prompt
 # -----------------------------------------------------------------------------
 BLOG_QA_PROMPT = PromptTemplate(
-    template="""You are a AI helpful assistant to help the user can reads news. Provide a general response.
+    template="""You are a knowledgeable AI assistant specializing in technology and AI topics. Your role is to help users understand blog content by providing clear, accurate, and contextual responses.
 
-Titles:
-{context}
+    Given this blog content:
+    {context}
 
-Question: {question}
+    Please answer the following question: {question}
 
-Answer:""",
+    Guidelines for your response:
+    1. Focus on information directly from the blog content
+    2. Use relevant quotes when appropriate
+    3. Break down complex technical concepts
+    4. Provide examples if mentioned in the content
+    5. If the answer isn't directly in the content, say so
+    6. Keep responses concise but informative
+
+    Answer:""",
     input_variables=["context", "question"]
 )
 
@@ -122,61 +151,136 @@ Answer:""",
 # 6. Helper: Format Context
 # -----------------------------------------------------------------------------
 def format_context(docs) -> str:
-    """Format titles for context, limit to unique relevant blogs & stay within token limits."""
-    unique_urls = set()
-    unique_titles = []
-    max_token_limit = 3000  # Ensure the prompt stays well within the token limit
+    """Format context with both titles and relevant content from retrieved documents."""
+    unique_docs = {}  # Use dict to track unique documents and their content
+    formatted_sections = []
+    max_token_limit = 3000
+    seen_urls = set()  # Track seen URLs to avoid duplicates
 
+    # First pass: collect unique documents and their best content
     for doc in docs:
-        url = doc["metadata"].get('url')
-        if url not in unique_urls:
-            unique_urls.add(url)
-            title_entry = f"- {doc['metadata']['title']} ({url})"
-            # Check token count before adding
-            if count_tokens("\n".join(unique_titles + [title_entry])) < max_token_limit:
-                unique_titles.append(title_entry)
+        url = doc["metadata"].get('url', '')
+        title = doc["metadata"].get('title', 'Untitled')
+        
+        # Skip if we've seen this URL before
+        if url in seen_urls:
+            continue
+            
+        seen_urls.add(url)
+        
+        # Create full URL for the blog post
+        full_url = f"http://localhost:3000{url}" if url else None
+        
+        if url not in unique_docs:
+            unique_docs[url] = {
+                'title': title,
+                'url': full_url,
+                'content': [],
+                'score': doc.get('similarity_score', 0)
+            }
+        
+        # Add content snippet with high relevance
+        if 'content' in doc:
+            unique_docs[url]['content'].append(doc['content'])
 
-    # Limit context to top 3 titles if needed
-    return "\n".join(unique_titles[:3])
+    # Second pass: format the context with titles and relevant content
+    for doc_info in sorted(unique_docs.values(), key=lambda x: x['score'], reverse=True):
+        section = []
+        
+        # Add title with clickable link
+        if doc_info['url']:
+            section.append(f"\n## [{doc_info['title']}]({doc_info['url']})")
+        else:
+            section.append(f"\n## {doc_info['title']}")
+        
+        # Add most relevant content snippets
+        if doc_info['content']:
+            # Take first 2 most relevant snippets to keep context focused
+            for snippet in doc_info['content'][:2]:
+                # Clean and format the snippet
+                cleaned_snippet = snippet.strip().replace('\n', ' ')
+                if len(cleaned_snippet) > 300:  # Limit snippet length
+                    cleaned_snippet = cleaned_snippet[:300] + "..."
+                section.append(cleaned_snippet)
+        
+        formatted_section = '\n'.join(section)
+        
+        # Check token limit before adding
+        current_context = '\n'.join(formatted_sections)
+        if count_tokens(current_context + formatted_section) < max_token_limit:
+            formatted_sections.append(formatted_section)
+        else:
+            break
+
+    # If no sections were added, return a message
+    if not formatted_sections:
+        return "No relevant content found."
+
+    # Combine all sections with clear separation
+    final_context = "\n---\n".join(formatted_sections)
+    
+    # Add a header to explain the context
+    header = "Here are the most relevant sections from the blog posts:\n"
+    
+    return header + final_context
 
 
 
 
-def chat_with_agent(user_input: str) -> str:
+def chat_with_agent(user_input: str) -> dict:
+    """Return structured response with separate content and links"""
     if retriever is None:
-        return "Retriever is not available. Please check FAISS index creation."
+        return {
+            "content": "Retriever is not available. Please check FAISS index creation.",
+            "links": []
+        }
 
     # Retrieve relevant documents
     docs = search_documents(
-    vectorstore=vectorstore,
-    query=user_input,
-    k=5,  # number of results
-    score_threshold=0.7  # minimum similarity score
+        vectorstore=vectorstore,
+        query=user_input,
+        k=5,
+        score_threshold=0.7
     )
-
 
     # If no docs found, fallback to direct LLM
     if not docs:
-        return llm.predict(f"Answer the question: {user_input}")
+        return {
+            "content": llm.predict(f"Answer the question: {user_input}"),
+            "links": []
+        }
 
-    # The rest of your code remains the same
+    # Get context and format links
     context = format_context(docs)
-    prompt = BLOG_QA_PROMPT.format(context=context, question=user_input)
-    print(f"Prompt sent:\n{prompt}")
-    print(f"Token count: {count_tokens(prompt)}")
+    
+    # Extract unique links from context
+    seen_urls = set()
+    links = []
+    for doc in docs:
+        url = doc["metadata"].get("url")
+        if url and url not in seen_urls:
+            seen_urls.add(url)
+            links.append({
+                "title": doc["metadata"].get("title", "Untitled"),
+                "url": f"http://localhost:3000{url}"
+            })
 
+    # Generate answer
+    prompt = BLOG_QA_PROMPT.format(context=context, question=user_input)
     qa_chain = RetrievalQA.from_chain_type(
         retriever=retriever,
         llm=llm,
         chain_type_kwargs={"prompt": BLOG_QA_PROMPT}
     )
 
-
     result = qa_chain.invoke({"query": user_input})
     answer = result['result']
 
-    response = f"{answer}\n\nRelevant posts:\n{context}"
-    return response
+    # Return structured response with deduplicated links
+    return {
+        "content": answer,
+        "links": links
+    }
 
 # -----------------------------------------------------------------------------
 # 8. Entry Point
