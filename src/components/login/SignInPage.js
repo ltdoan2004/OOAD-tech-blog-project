@@ -92,7 +92,7 @@ function SignInPage() {
       >
         Login
       </Link>
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white   dark:border-r lg:flex">
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-blue_super_dark bg-white dark:bg-dark dark:bg-secondary" />
         <div className="relative z-20 flex items-center text-lg font-medium">
         <DotLottiePlayer

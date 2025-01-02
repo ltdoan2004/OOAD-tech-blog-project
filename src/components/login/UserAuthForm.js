@@ -177,7 +177,7 @@ export default function UserAuthForm() {
             form.reset();
             setError("");
           }}
-          className="text-sm text-gray-500 dark:text-white hover:underline"
+          className="text-sm text-gray-500 dark:text-yellow-500 text-purple-500 hover:underline"
         >
           {isRegistering ? "Already have an account? Sign In" : "Don't have an account? Register"}
         </button>

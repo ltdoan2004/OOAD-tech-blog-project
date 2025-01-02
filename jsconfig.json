@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "baseUrl": ".", // Set the base URL to the root of your project
     "paths": {
-      "@/*": ["./*"],
-      "contentlayer/generated": ["./.contentlayer/generated"],
+      "@/*": ["*"],
+      "contentlayer/generated": [".contentlayer/generated"]
     }
   }
 }
