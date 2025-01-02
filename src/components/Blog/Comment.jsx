@@ -2,7 +2,7 @@
 
 import classNames from "classnames";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./index.module.css";
 import { formatDistance } from "date-fns";
 import { useAuth } from '@/src/context/AuthContext';

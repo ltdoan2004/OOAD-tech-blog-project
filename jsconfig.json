@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": ".", // Set the base URL to the root of your project
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"],
-      "contentlayer/generated": [".contentlayer/generated"]
+      "@/*": ["./*"],
+      "contentlayer/generated": ["./.contentlayer/generated"]
     }
-  }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.js",
+    "**/*.jsx",
+    ".contentlayer/generated"
+  ]
 }

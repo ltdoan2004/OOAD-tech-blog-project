@@ -7,7 +7,8 @@
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-images": "node scripts/check-blog-images.js"
   },
   "dependencies": {
     "@dotlottie/react-player": "^1.2.1",
