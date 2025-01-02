@@ -53,11 +53,11 @@ const NotificationIcon = () => {
   useEffect(() => {
     // Data với updatedAt
     const blogs = [
-      //{ title: "AI's Trust Problems", url: "http://localhost:3000/blogs/AIproblems", updatedAt: "2024-05-03", avatarUrl: "/blogs/AIproblem1.jpg" },
+      { title: "AI's Trust Problems", url: "http://localhost:3000/blogs/AIproblems", updatedAt: "2024-05-03", avatarUrl: "/blogs/AIproblem1.jpg" },
       { title: "Role of Nvidia Chips", url: "http://localhost:3000/blogs/NVIDIA-blog", updatedAt: "2024-02-29", avatarUrl: "/blogs/nvidia-2.jpg"},
       { title: "AI's 2024 Trends", url: "http://localhost:3000/blogs/AI-trends", updatedAt: "2025-01-01", avatarUrl: "/blogs/ai-trends-7.png" },
-      { title: "Adding Search To Your Site In 15 Minutes", url: "http://localhost:3000/blogs/adding-search", updatedAt: "2022-07-14", avatarUrl: "/blogs/adding-seo.jpg" },
-      { title: "Apple promised next-gen CarPlay in 2024", url: "http://localhost:3000/blogs/apple-car", updatedAt: "2024-12-31", avatarUrl: "/blogs/apple-car.jpg" },
+      { title: "LG’s 2025 gaming monitor", url: "http://localhost:3000/blogs/lg-2025-gaming-monitor", updatedAt: "2024-12-30", avatarUrl: "/blogs/lg-2025-gaming(edited).jpg" },
+      { title: "Apple promised next-gen CarPlay in 2024", url: "http://localhost:3000/blogs/apple-car", updatedAt: "2024-12-31", avatarUrl: "/blogs/apple-car(edited-ver2).jpg" },
       { title: "Automating Repetitive Tasks", url: "http://localhost:3000/blogs/automating-repetitive-tasks-productivity-hacks-for-developers", updatedAt: "2023-01-01", avatarUrl: "/blogs/emile-perron-xrVDYZRGdw4-unsplash.jpg" },
       { title: "Building Progressive Web Apps", url: "http://localhost:3000/blogs/building-progressive-web-apps-bridging-the-gap-between-web-and-mobile", updatedAt: "2023-01-04", avatarUrl: "/blogs/adding-seo-1.jpg" },
     ];
