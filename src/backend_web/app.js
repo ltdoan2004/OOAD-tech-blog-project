@@ -28,6 +28,7 @@ mongoose.connect(process.env.MONGO_URL)
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/comments', commentRoutes);
+app.use('/api/blogs', require('./routes/blogs'));
 
 app.use(errorHandler);
 

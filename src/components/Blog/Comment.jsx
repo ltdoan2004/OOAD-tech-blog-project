@@ -2,12 +2,14 @@
 
 import classNames from "classnames";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./index.module.css";
 import { formatDistance } from "date-fns";
 import { useAuth } from '@/src/context/AuthContext';
+import { useRouter } from 'next/navigation';
 
-const CommentItem = ({ text, time, userName = "Unknown" }) => {
+
+const CommentItem = ({ text, time }) => {
   return (
     <div className="flex gap-x-4">
       <div
@@ -16,10 +18,10 @@ const CommentItem = ({ text, time, userName = "Unknown" }) => {
           styles.avatar
         )}
       >
-        {userName.substring(0, 2).toUpperCase()}
+        NA
       </div>
       <div>
-        <p className="font-semibold mb-1 dark:text-white">{userName}</p>
+        <p className="font-semibold mb-1 dark:text-white">Hồ Thiên Trường</p>
         <p
           className="whitespace-pre-line text-sm leading-5 dark:text-white"
           dangerouslySetInnerHTML={{ __html: text }}
@@ -33,20 +35,25 @@ const CommentItem = ({ text, time, userName = "Unknown" }) => {
 };
 
 const Comment = ({ postId }) => {
+  const router = useRouter();
   const { user } = useAuth();
   const [comments, setComments] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [isAnonymous, setIsAnonymous] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(!user);
 
-  // Fetch comments when component mounts
+  // Update isAnonymous when user state changes
   useEffect(() => {
-    fetchComments();
-  }, [postId]);
-
-  useEffect(() => {
-    console.log('Current user:', user); // Debug current user state
+    setIsAnonymous(!user);
   }, [user]);
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Ngăn reload trang
+    if (inputValue.trim() === "") return; 
+
+    const newComment = {
+      text: inputValue,
+      time: new Date().toISOString(), // Lưu thời gian thực
+    };
 
   const fetchComments = async () => {
     try {
@@ -84,10 +91,9 @@ const Comment = ({ postId }) => {
       if (!isAnonymous && user) {
         const token = localStorage.getItem("x-auth-token");
         if (!token) {
-          throw new Error('No authentication token found');
+          throw new Error('Please log in to comment with your account');
         }
         headers["x-auth-token"] = token;
-        console.log('Sending request with token:', token);
       }
 
       const response = await fetch("http://localhost:5001/api/comments", {
@@ -96,6 +102,7 @@ const Comment = ({ postId }) => {
         body: JSON.stringify({
           postId,
           content: inputValue,
+          anonymous: isAnonymous
         }),
       });
 
@@ -105,13 +112,17 @@ const Comment = ({ postId }) => {
       }
 
       const data = await response.json();
-      console.log('Comment posted successfully:', data);
-      
       setComments((prev) => [data, ...prev]);
       setInputValue("");
     } catch (error) {
       console.error("Error posting comment:", error);
-      alert(error.message || "Error posting comment. Please try again.");
+      if (error.message.includes('Please log in')) {
+        if (confirm('Please log in to comment with your account. Go to login page?')) {
+          router.push('/login');
+        }
+      } else {
+        alert(error.message || "Error posting comment. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -119,34 +130,34 @@ const Comment = ({ postId }) => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSubmit(event);
+      event.preventDefault(); 
+      handleSubmit(event); 
     }
   };
 
   return (
     <div className="px-5 md:px-10 mt-8">
       <p className="text-2xl font-semibold inline-block pb-1 mb-4 dark:text-white text-black border-b-[3px] border-yellow-400 dark:border-yellow-600">
-        Comments({comments.length})
+        Comment({comments.length})
       </p>
 
       <div className="flex gap-x-3">
         <div>
           <Image
-            src="/svgs/login.svg"
+            src={user ? "/svgs/user-avatar.svg" : "/svgs/login.svg"}
             alt="Avatar"
             width={60}
             height={60}
-            className="bg-[#ff484214] rounded-full border border-yellow-500"
+            className="bg-[#ff484214] rounded-full border border"
           />
         </div>
 
         <form className="flex-1" onSubmit={handleSubmit}>
           <textarea
-            placeholder="Enter your comment"
+            placeholder={user ? "Enter your comment" : "Enter your comment (anonymous)"}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDown} 
             className={classNames(
               "w-full rounded-md border border-[#919eab] focus:border-[#df062d] dark:bg-[#24292e] dark:text-white",
               styles.textarea
@@ -155,38 +166,34 @@ const Comment = ({ postId }) => {
           />
           <div className="flex justify-between items-center mt-2">
             {user && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
                 Commenting as: {user.name}
               </p>
             )}
-            <label className="flex items-center text-sm">
-              <input
-                type="checkbox"
-                checked={isAnonymous}
-                onChange={(e) => setIsAnonymous(e.target.checked)}
-                className="mr-2"
-              />
-              Post anonymously
-            </label>
+            {user && (
+              <label className="flex items-center text-sm rounded-md border py-1 px-1 dark:text-yellow-600 text-purple-600">
+                <input
+                  type="checkbox"
+                  checked={isAnonymous}
+                  onChange={(e) => setIsAnonymous(e.checked)}
+                  className="mr-2 dark:bg-yellow-200 bg-purple-200"
+                />
+                Post anonymously
+              </label>
+            )}
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-1.5 rounded text-sm cursor-pointer bg-yellow-400 text-black dark:bg-yellow-600 dark:text-white disabled:opacity-50"
+              className="px-4 py-1.5 rounded text-sm cursor-pointer dark:bg-yellow-400 dark:text-black bg-purple-600 text-white disabled:opacity-50"
             >
               {loading ? "Posting..." : "Comment"}
             </button>
           </div>
         </form>
       </div>
-
       <div className="mt-4 flex flex-col gap-y-4">
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment._id}
-            text={comment.content}
-            time={comment.createdAt}
-            userName={comment.userId?.name || comment.userName}
-          />
+        {comments.map((comment, index) => (
+          <CommentItem key={index} text={comment.text} time={comment.time} />
         ))}
       </div>
     </div>
@@ -194,4 +201,3 @@ const Comment = ({ postId }) => {
 };
 
 export default Comment;
-

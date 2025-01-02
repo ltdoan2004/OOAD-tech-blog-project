@@ -42,9 +42,10 @@ export default function UserAuthForm() {
     setError("");
 
     try {
-      console.log('Attempting login with:', data);
+      const endpoint = isRegistering ? "register" : "login";
+      console.log(`Attempting ${endpoint} with:`, data);
 
-      const response = await fetch("http://localhost:5001/api/users/login", {
+      const response = await fetch(`http://localhost:5001/api/users/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,31 +57,34 @@ export default function UserAuthForm() {
       console.log('Server response:', result);
 
       if (response.ok) {
-        try {
-          // Xóa token cũ nếu có
-          localStorage.removeItem('x-auth-token');
-          
-          // Lưu token mới
-          localStorage.setItem('x-auth-token', result.token);
-          console.log('Token saved to localStorage');
+        if (isRegistering) {
+          // Nếu đăng ký thành công, hiển thị thông báo và chuyển sang form đăng nhập
+          alert("Registration successful! Please login.");
+          setIsRegistering(false);
+          form.reset();
+        } else {
+          // Xử lý đăng nhập
+          try {
+            localStorage.removeItem('x-auth-token');
+            localStorage.setItem('x-auth-token', result.token);
+            console.log('Token saved to localStorage');
 
-          // Gọi login từ AuthContext
-          await login(result.token);
-          console.log('Login successful');
+            await login(result.token);
+            console.log('Login successful');
 
-          // Chuyển hướng sau khi đăng nhập thành công
-          if (result.user.isAdmin) {
-            router.push("/admin");
-          } else {
-            router.push("/user");
+            if (result.user.isAdmin) {
+              router.push("/admin");
+            } else {
+              router.push("/user");
+            }
+          } catch (error) {
+            console.error('Error during login process:', error);
+            localStorage.removeItem('x-auth-token');
+            setError(error.message || "Authentication failed. Please try again.");
           }
-        } catch (error) {
-          console.error('Error during login process:', error);
-          localStorage.removeItem('x-auth-token');
-          setError(error.message || "Authentication failed. Please try again.");
         }
       } else {
-        setError(result.message || "Login failed");
+        setError(result.message || `${isRegistering ? "Registration" : "Login"} failed`);
       }
     } catch (err) {
       console.error('Network or parsing error:', err);
@@ -168,8 +172,12 @@ export default function UserAuthForm() {
 
       <div className="flex justify-center mt-4">
         <button
-          onClick={() => setIsRegistering(!isRegistering)}
-          className="text-sm text-gray-500 dark:text-white hover:underline"
+          onClick={() => {
+            setIsRegistering(!isRegistering);
+            form.reset();
+            setError("");
+          }}
+          className="text-sm text-gray-500 dark:text-yellow-500 text-purple-500 hover:underline"
         >
           {isRegistering ? "Already have an account? Sign In" : "Don't have an account? Register"}
         </button>

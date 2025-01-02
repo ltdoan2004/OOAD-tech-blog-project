@@ -25,7 +25,7 @@ const BlogDetails = ({ blog, slug: blogSlug }) => {
       </Link>
       <div className="w-full mt-3">
         <Chatbot blogContent={blog.body.raw} blogUrl={`http://localhost:3000/blogs/${blogSlug}`}/>
-        <Comment postId={blogSlug} />
+        {/* <Comment postId={blogSlug} /> */}
       </div>
     </div>
   );
