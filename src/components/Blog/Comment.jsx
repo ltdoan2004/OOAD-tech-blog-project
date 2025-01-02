@@ -144,7 +144,7 @@ const Comment = ({ postId }) => {
       <div className="flex gap-x-3">
         <div>
           <Image
-            src={user ? "/svgs/user-avatar.svg" : "/svgs/login.svg"}
+            src={user ? "/svgs/login.svg" : "/svgs/login.svg"}
             alt="Avatar"
             width={60}
             height={60}
