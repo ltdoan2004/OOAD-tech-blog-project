@@ -91,11 +91,11 @@ export default function BlogPage({ params }) {
 
   return (
     <>
-    <script
+      <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-       <article>
+      <article>
       <div className="mb-8 text-center relative w-full h-[70vh] bg-dark">
         <div className="w-full z-10 flex flex-col items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
           <Tag
@@ -165,7 +165,9 @@ export default function BlogPage({ params }) {
       </div>
     </article>
 
-    <Comment postId={params.slug} />
+    <div className="w-full max-w-4xl mx-auto px-4 py-8">
+      <Comment postId={params.slug} />
+    </div>
     </>
    
   );

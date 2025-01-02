@@ -5,14 +5,10 @@ import React from "react";
 import { slug } from "github-slugger";
 import ViewCounter from "./ViewCounter";
 import Chatbot from './Chatbot';
-import { useEffect } from 'react';
-import Comment from './Comment';
-
 
 const BlogDetails = ({ blog, slug: blogSlug }) => {
-
   return (
-    <div className="px-2  md:px-10 bg-accent dark:bg-accentDark text-light dark:text-dark py-2 flex items-center justify-around flex-wrap text-lg sm:text-xl font-medium mx-5  md:mx-10 rounded-lg">
+    <div className="px-2 md:px-10 bg-accent dark:bg-accentDark text-light dark:text-dark py-2 flex items-center justify-around flex-wrap text-lg sm:text-xl font-medium mx-5 md:mx-10 rounded-lg">
       <time className="m-3"> 
         {format(parseISO(blog.publishedAt), "LLLL d, yyyy")}
       </time>
@@ -25,7 +21,6 @@ const BlogDetails = ({ blog, slug: blogSlug }) => {
       </Link>
       <div className="w-full mt-3">
         <Chatbot blogContent={blog.body.raw} blogUrl={`http://localhost:3000/blogs/${blogSlug}`}/>
-        {/* <Comment postId={blogSlug} /> */}
       </div>
     </div>
   );

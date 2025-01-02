@@ -87,9 +87,7 @@ export default function BlogManager({ blogs }) {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4 dark:text-yellow-600 text-purple-600">
-        Manage Blog Posts
-      </h2>
+      
 
       {/* Search and Filter Section */}
       <div className="mb-6 space-y-4">
@@ -100,7 +98,7 @@ export default function BlogManager({ blogs }) {
             placeholder="Search blogs by title..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full p-3 border rounded-lg dark:bg-gray-800 dark:text-white 
+            className="w-full p-3 border rounded-lg dark:bg-gray-800 text-dark
                      focus:ring-2 focus:ring-purple-600 dark:focus:ring-yellow-500"
           />
           {(searchQuery || selectedTags.length > 0) && (

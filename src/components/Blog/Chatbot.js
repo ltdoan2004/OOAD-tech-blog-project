@@ -200,8 +200,8 @@ const Chatbot = ({ blogContent, blogUrl }) => {
                       key={index}
                       className={`mb-2 p-3 rounded-lg max-w-[80%] ${
                         isBot
-                          ? 'bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light'
-                          : 'bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light ml-auto'
+                          ? 'bg-purple-400 dark:bg-yellow-400 text-dark dark:text-dark'
+                          : 'bg-purple-400 dark:bg-yellow-400 text-dark dark:text-dark ml-auto'
                       }`}
                     >
                       <div

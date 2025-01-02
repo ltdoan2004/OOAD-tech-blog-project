@@ -62,13 +62,25 @@ const Agent = () => {
   };
 
   const formatMessageWithLinks = (message) => {
+    // Split content by newlines and filter out empty lines
+    const paragraphs = message.content
+      .split('\n')
+      .filter(line => line.trim() !== '');
+
     return (
-      <div>
-        <p className="mb-2">{message.content}</p>
+      <div className="space-y-3"> {/* Add vertical spacing between elements */}
+        <div className="space-y-2"> {/* Add spacing between paragraphs */}
+          {paragraphs.map((paragraph, idx) => (
+            <p key={idx} className="leading-relaxed">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+        
         {message.links && message.links.length > 0 && (
-          <div className="mt-2 pt-2 border-t border-gray-600">
-            <p className="text-sm font-medium mb-1">Related Articles:</p>
-            <ul className="space-y-1">
+          <div className="mt-4 pt-3 border-t border-gray-600"> {/* Increased top margin */}
+            <p className="text-sm font-medium mb-2">Related Articles:</p>
+            <ul className="space-y-2"> {/* Increased spacing between links */}
               {message.links.map((link, index) => (
                 <li key={index}>
                   <a
@@ -130,29 +142,29 @@ const Agent = () => {
                 <div
                   key={index}
                   className={`
-                    mb-3 max-w-[70%] p-3 rounded 
+                    mb-4 max-w-[70%] p-4 rounded  
                     ${
                       isBot
-                        ? "bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light"
-                        : "bg-purple-400 dark:bg-yellow-400 text-dark dark:text-light ml-auto"
+                        ? "bg-purple-400 dark:bg-yellow-400 text-dark dark:text-dark"
+                        : "bg-purple-400 dark:bg-yellow-400 text-dark dark:text-dark ml-auto"
                     }
                   `}
                   style={{ clear: "both" }}
                 >
                   <div
-                    className={`flex items-start gap-2 ${
+                    className={`flex items-start gap-3 ${
                       isBot ? "" : "flex-row-reverse text-right"
                     }`}
                   >
                     <Image
                       src={isBot ? "/bot_chat.webp" : "/user_chat.webp"}
                       alt={`${message.sender} avatar`}
-                      width={24}
-                      height={24}
+                      width={28}
+                      height={28}
                       className="rounded-full mt-1"
                     />
-                    <div>
-                      <div className="font-semibold mb-1">
+                    <div className="space-y-2"> {/* Added vertical spacing */}
+                      <div className="font-semibold mb-2 text-lg"> {/* Increased font size and margin */}
                         {isBot ? "AI Assistant" : "You"}:
                       </div>
                       {formatMessageWithLinks(message)}
