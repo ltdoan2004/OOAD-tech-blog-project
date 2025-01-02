@@ -199,5 +199,5 @@ const Comment = ({ postId }) => {
     </div>
   );
 };
-
+}
 export default Comment;

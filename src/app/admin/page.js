@@ -1,10 +1,8 @@
 
 'use client';
 import { allBlogs } from 'contentlayer/generated';
-import React, { useState } from 'react';
 import RecentPostsAdmin from '@/src/components/Admin/RecentPostsAdmin';
 import SubscriberGraph from '@/src/components/Admin/SubscriberGraph';
-import { allBlogs } from "contentlayer/generated";
 import React, { useState, useEffect } from 'react';
 import BlogManager from "@/src/components/Admin/BlogManager";
 import Link from 'next/link';
@@ -61,8 +59,12 @@ export default function AdminPage() {
           <SubscriberGraph />
         </div>
       </section>
-
-      {/* Recent Posts Section */}
+{/* 
+      Recent Posts Section
       <section className="mt-12">
         <RecentPostsAdmin blogs={blogs} />
-      </section>
+      </section> */}
+</main>
+  );
+}
+
