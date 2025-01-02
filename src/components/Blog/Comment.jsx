@@ -2,13 +2,14 @@
 
 import classNames from "classnames";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "./index.module.css";
 import { formatDistance } from "date-fns";
 import { useAuth } from '@/src/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
-const CommentItem = ({ text, time, userName = "Unknown" }) => {
+
+const CommentItem = ({ text, time }) => {
   return (
     <div className="flex gap-x-4">
       <div
@@ -17,10 +18,10 @@ const CommentItem = ({ text, time, userName = "Unknown" }) => {
           styles.avatar
         )}
       >
-        {userName.substring(0, 2).toUpperCase()}
+        NA
       </div>
       <div>
-        <p className="font-semibold mb-1 dark:text-white">{userName}</p>
+        <p className="font-semibold mb-1 dark:text-white">Hồ Thiên Trường</p>
         <p
           className="whitespace-pre-line text-sm leading-5 dark:text-white"
           dangerouslySetInnerHTML={{ __html: text }}
@@ -45,15 +46,14 @@ const Comment = ({ postId }) => {
   useEffect(() => {
     setIsAnonymous(!user);
   }, [user]);
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Ngăn reload trang
+    if (inputValue.trim() === "") return; 
 
-  // Fetch comments when component mounts
-  useEffect(() => {
-    fetchComments();
-  }, [postId]);
-
-  useEffect(() => {
-    console.log('Current user:', user); // Debug current user state
-  }, [user]);
+    const newComment = {
+      text: inputValue,
+      time: new Date().toISOString(), // Lưu thời gian thực
+    };
 
   const fetchComments = async () => {
     try {
@@ -130,15 +130,15 @@ const Comment = ({ postId }) => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      handleSubmit(event);
+      event.preventDefault(); 
+      handleSubmit(event); 
     }
   };
 
   return (
     <div className="px-5 md:px-10 mt-8">
       <p className="text-2xl font-semibold inline-block pb-1 mb-4 dark:text-white text-black border-b-[3px] border-yellow-400 dark:border-yellow-600">
-        Comments({comments.length})
+        Comment({comments.length})
       </p>
 
       <div className="flex gap-x-3">
@@ -148,7 +148,7 @@ const Comment = ({ postId }) => {
             alt="Avatar"
             width={60}
             height={60}
-            className="bg-[#ff484214] rounded-full border dark:border-yellow-500 border-purple-500"
+            className="bg-[#ff484214] rounded-full border border"
           />
         </div>
 
@@ -157,9 +157,9 @@ const Comment = ({ postId }) => {
             placeholder={user ? "Enter your comment" : "Enter your comment (anonymous)"}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDown} 
             className={classNames(
-              "w-full rounded-md border border-[#919eab] focus:border-purple-600 dark:focus:border-yellow-600 dark:bg-[#24292e] dark:text-white",
+              "w-full rounded-md border border-[#919eab] focus:border-[#df062d] dark:bg-[#24292e] dark:text-white",
               styles.textarea
             )}
             rows={5}
@@ -191,15 +191,9 @@ const Comment = ({ postId }) => {
           </div>
         </form>
       </div>
-
       <div className="mt-4 flex flex-col gap-y-4">
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment._id}
-            text={comment.content}
-            time={comment.createdAt}
-            userName={comment.userId?.name || comment.userName}
-          />
+        {comments.map((comment, index) => (
+          <CommentItem key={index} text={comment.text} time={comment.time} />
         ))}
       </div>
     </div>
@@ -207,4 +201,3 @@ const Comment = ({ postId }) => {
 };
 
 export default Comment;
-
