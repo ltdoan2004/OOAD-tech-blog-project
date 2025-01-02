@@ -42,105 +42,48 @@ def create_faiss_index(
     metadatas: list[dict],
     save_path: str = "blog_index.faiss"
 ) -> Optional[FAISS]:
-    """
-    Create and save FAISS index
-    
-    Args:
-        blogs_data: List of blog data
-        texts: List of text content to index
-        metadatas: List of metadata for each text
-        save_path: Path to the directory to save FAISS index
-        
-    Returns:
-        FAISS vectorstore object or None if creation fails
-    """
+    """Create and save FAISS index"""
     try:
-        # Validate inputs
-        if not texts or not metadatas:
-            logger.error("Empty texts or metadatas provided")
-            return None
-            
-        if len(texts) != len(metadatas):
-            logger.error("Number of texts and metadatas must match")
-            return None
-
-        logger.info(f"Creating FAISS index with {len(texts)} documents...")
+        # Initialize embeddings
+        embeddings = OpenAIEmbeddings()
         
-        # Create the vectorstore
+        # Create FAISS index
         vectorstore = FAISS.from_texts(
             texts=texts,
             embedding=embeddings,
             metadatas=metadatas
         )
         
-        if not vectorstore:
-            logger.error("Failed to create vectorstore")
-            return None
-            
         # Create directory if it doesn't exist
-        save_dir = Path(save_path)
-        save_dir.mkdir(parents=True, exist_ok=True)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         
-        # Save the index
-        try:
-            vectorstore.save_local(str(save_dir))
-            logger.info(f"FAISS index saved successfully to directory: {save_dir}")
-        except Exception as save_error:
-            logger.error(f"Failed to save FAISS index: {save_error}")
-            # Even if save fails, return the in-memory index
-            return vectorstore
+        # Save index
+        vectorstore.save_local(save_path)
+        print(f"Successfully created and saved FAISS index to {save_path}")
         
         return vectorstore
-        
     except Exception as e:
-        logger.error(f"Failed to create FAISS index: {e}")
-        return None
+        print(f"Error creating FAISS index: {e}")
+        raise
 
-def load_faiss_index(load_path: str = "blog_index.faiss") -> Optional[FAISS]:
-    """
-    Load FAISS index from disk
-    
-    Args:
-        load_path: Path to the directory containing FAISS index
-        
-    Returns:
-        FAISS vectorstore object or None if loading fails
-    """
+def load_faiss_index(folder_path: str = "blog_index.faiss") -> Optional[FAISS]:
+    """Load FAISS index from disk"""
     try:
-        index_dir = Path(load_path)
+        # Initialize embeddings
+        embeddings = OpenAIEmbeddings()
         
-        # Check if directory exists and contains required files
-        if not index_dir.is_dir():
-            logger.error(f"Index directory not found at {index_dir}")
-            return None
-            
-        # Check for required files (index.faiss and index.pkl)
-        required_files = ["index.faiss", "index.pkl"]
-        missing_files = [f for f in required_files if not (index_dir / f).exists()]
-        
-        if missing_files:
-            logger.error(f"Missing required files in {index_dir}: {missing_files}")
-            return None
-            
-        logger.info(f"Loading FAISS index from directory: {index_dir}")
+        # Load the index
         vectorstore = FAISS.load_local(
-            folder_path=str(index_dir),
-            embeddings=embeddings,
-            allow_dangerous_deserialization=True
+            folder_path=folder_path,
+            embeddings=embeddings
         )
         
-        # Validate the loaded index
-        if not vectorstore or not hasattr(vectorstore, 'docstore'):
-            logger.error("Loaded index is invalid or corrupted")
-            return None
-            
-        doc_count = len(vectorstore.docstore._dict)
-        logger.info(f"FAISS index loaded successfully with {doc_count} documents")
+        print(f"Successfully loaded FAISS index from {folder_path}")
         return vectorstore
         
     except Exception as e:
-        logger.error(f"Failed to load FAISS index: {e}")
-        return None
+        print(f"Failed to load FAISS index: {e}")
+        raise
 
 def search_documents(
     vectorstore: FAISS,
@@ -199,43 +142,21 @@ def get_retriever(vectorstore: FAISS, k: int = 3):
         return None
     return vectorstore.as_retriever(search_kwargs={"k": k})
 
-def get_or_create_index(
-    blogs_data: Optional[list] = None,
-    texts: Optional[list[str]] = None,
-    metadatas: Optional[list[dict]] = None,
-    index_path: str = "blog_index.faiss"
-) -> Optional[FAISS]:
-    """
-    Get existing FAISS index or create a new one if it doesn't exist
-    
-    Args:
-        blogs_data: List of blog data (only needed for creation)
-        texts: List of text content (only needed for creation)
-        metadatas: List of metadata (only needed for creation)
-        index_path: Path to save/load the FAISS index
+def get_or_create_index(folder_path: str, blogs_data=None, texts=None, metadatas=None):
+    """Get existing FAISS index or create new one if needed."""
+    try:
+        # Try to load existing index
+        return load_faiss_index(folder_path=folder_path)
+    except Exception as e:
+        print(f"Could not load existing index: {e}")
         
-    Returns:
-        FAISS vectorstore object or None if both loading and creation fail
-    """
-    # First try to load existing index
-    vectorstore = load_faiss_index(index_path)
-    if vectorstore:
-        logger.info("Successfully loaded existing FAISS index")
-        return vectorstore
-        
-    # If loading fails and we have data, create new index
-    if texts and metadatas:
-        logger.info("No existing index found, creating new one...")
-        vectorstore = create_faiss_index(
-            blogs_data=blogs_data,
-            texts=texts,
-            metadatas=metadatas,
-            save_path=index_path
-        )
-        if vectorstore:
-            logger.info("Successfully created new FAISS index")
-            return vectorstore
-    else:
-        logger.error("No existing index found and no data provided to create new one")
-        
-    return None
+        # If we have data, create new index
+        if blogs_data and texts and metadatas:
+            return create_faiss_index(
+                blogs_data=blogs_data,
+                texts=texts,
+                metadatas=metadatas,
+                save_path=folder_path
+            )
+        else:
+            raise ValueError("No existing index found and no data provided to create new one")

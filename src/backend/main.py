@@ -1,7 +1,8 @@
-from fastapi import FastAPI
-from api.routes import router as api_router
-from middlewares.logging import log_request_data
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from api.routes import router as api_router
+from db.models import ChatRequest
 
 app = FastAPI()
 
