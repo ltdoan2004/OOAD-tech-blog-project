@@ -62,12 +62,16 @@ Open http://localhost:3000 in your browser to access the application.
 - **Using the Editor:**
 - **Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
 - **Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
-- **Save as Draft:** If you're not ready to publish, you can save your post as a draft to edit later.
 - **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
 **3. Explore and Search:**
 - **Browse Posts:** Use the navigation bar to access different categories or find posts by topic.
 - **Search Functionality:** Enter keywords into the search bar to find related posts. The search results will display the most relevant articles.
 - **Utilize Tags:** Click on tags to view other posts related to topics of interest.
+
+## Key Features
+- 🧑‍💼**Admin**
+
+- 🙆**User**
 
 ## Contributing
 _**We are very happy and satisfied to receive your comments and contributions!**_
