@@ -6,7 +6,7 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
 ## Web's Logo
 <Image
   src="/public/logo.webp"
-  width="718"
+  width="204"
   height="404"
   alt="TechConnect Logo"
   sizes="100vw"
