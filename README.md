@@ -11,7 +11,8 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
   height="305"
   alt="TechConnect Logo"
   sizes="100vw"
-/> _TechConnect_
+/> 
+_TechConnect_
 
 ## Prerequisites
 Before you continue, ensure you meet the following requirements:
