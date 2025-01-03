@@ -43,7 +43,7 @@ Create a  *.env file*  in the root directory with the following content:
 # NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvdmJyaHJhendqcHd1cGVranRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUxOTA0ODcsImV4cCI6MjA1MDc2NjQ4N30.RSAOrloJplJY1dN-h06gXR_hIRAiam2PIBDOTf918kM
 # NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
-**📌Note that:** When using, remove all pound signs (#).
+**📌Note that:** When using, remove all hashtag (#).
 
 **4.Run the Development Server:**
 ```bash
