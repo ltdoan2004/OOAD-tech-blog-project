@@ -5,12 +5,13 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
 
 ## Web's Logo
 <Image
+  className="circular-image"
   src="/public/logo.webp"
   width="305"
   height="305"
   alt="TechConnect Logo"
   sizes="100vw"
-/>
+/> _TechConnect_
 
 ## Prerequisites
 Before you continue, ensure you meet the following requirements:
