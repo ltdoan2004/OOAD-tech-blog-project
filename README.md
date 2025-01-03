@@ -67,7 +67,7 @@ Open http://localhost:3000 in your browser to access the application.
 - **Utilize Tags:** Click on tags to view other posts related to topics of interest.
 
 ## Contributing
-We are very happy and satisfied to receive your comments and contributions!
+_**We are very happy and satisfied to receive your comments and contributions!**_
 
 If you have any suggestions that could improve this project, please feel free to fork the repository and create a pull request. Alternatively, you can open an issue with the tag "".
 
