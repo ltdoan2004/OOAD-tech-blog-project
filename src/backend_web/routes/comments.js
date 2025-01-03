@@ -59,14 +59,18 @@ router.post('/', async (req, res) => {
 router.delete('/:id', [auth, adminAuth], async (req, res) => {
   try {
     const comment = await Comment.findById(req.params.id);
+    
     if (!comment) {
       return res.status(404).json({ message: 'Comment not found' });
     }
 
-    await comment.remove();
+    // Sử dụng deleteOne thay vì remove
+    await Comment.deleteOne({ _id: req.params.id });
+    
     res.json({ message: 'Comment deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Error deleting comment:', error);
+    res.status(500).json({ message: 'Server error while deleting comment' });
   }
 });
 

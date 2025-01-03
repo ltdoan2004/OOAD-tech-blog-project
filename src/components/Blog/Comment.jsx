@@ -93,6 +93,10 @@ const Comment = ({ postId }) => {
 
     try {
       const token = localStorage.getItem('x-auth-token');
+      if (!token) {
+        throw new Error('No authentication token found');
+      }
+
       const response = await fetch(`http://localhost:5001/api/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
@@ -102,13 +106,14 @@ const Comment = ({ postId }) => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to delete comment');
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to delete comment');
       }
 
       setComments(prev => prev.filter(comment => comment._id !== commentId));
     } catch (error) {
       console.error('Error deleting comment:', error);
-      alert('Failed to delete comment');
+      alert(error.message || 'Failed to delete comment');
     }
   };
 
@@ -156,7 +161,7 @@ const Comment = ({ postId }) => {
 
   return (
     <div className="w-full max-w-4xl mx-auto bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
-      <h3 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-gray-100">
+      <h3 className="text-2xl font-semibold mb-6 text-gray-900 dark:text-white">
         Comments ({comments.length})
       </h3>
 
