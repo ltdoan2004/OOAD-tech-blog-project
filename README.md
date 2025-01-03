@@ -33,7 +33,7 @@ cd OOAD-tech-blog-project-main
 ```bash
 npm install
 ```
-**3.Set Up Environment Variables:**
+**3.Set Up Environment Variables:** 🔑🔑🔑
 
 Create a  *.env file*  in the root directory with the following content:
 ```bash
@@ -105,11 +105,11 @@ git push origin yourBranch-name/OOAD-tech-blog-project
 We'd like to thank all contributors who have helped improve this project:
 - Project members:
 
-    **Lê Thiên Doanh** https://github.com/ltdoan2004
+  🐻  **Lê Thiên Doanh** https://github.com/ltdoan2004
 
-    **Hồ Thiên Trường** https://github.com/TruongHo22306
+  🐻‍❄️  **Hồ Thiên Trường** https://github.com/TruongHo22306
 
-    **Nguyễn Thành Nam** https://github.com/ctin2004
+  🐼  **Nguyễn Thành Nam** https://github.com/ctin2004
 
 - Project link: 
 https://github.com/ltdoan2004/OOAD-tech-blog-project
