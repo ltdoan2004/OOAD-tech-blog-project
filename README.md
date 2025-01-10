@@ -95,7 +95,7 @@ Open http://localhost:3000 in your browser to access the application.
   <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
   <img src="/demo/chatbot.png" alt="Image 2" width="45%">
 </p>
-📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/src/backend/README.md
+📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
 
 
 ## Key Features
