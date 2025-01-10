@@ -34,7 +34,7 @@ const Footer = () => {
           type="email"
           placeholder="Enter your email"
           {...register("email", { required: true, maxLength: 80 })}
-          className="w-full bg-transparent pl-2 sm:pl-0 text-dark focus:border-dark focus:ring-0 border-0 border-b mr-2 pb-1"
+          className="w-full bg-transparent pl-2 sm:pl-0 text-dark dark:text-white focus:border-dark focus:ring-0 border-0 border-b mr-2 pb-1"
         />
 
         <input

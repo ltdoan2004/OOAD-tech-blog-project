@@ -89,6 +89,13 @@ Open http://localhost:3000 in your browser to access the application.
 - **Search Functionality:** Enter keywords into the search bar to find related posts. The search results will display the most relevant articles.
 - **Utilize Tags:** Click on tags to view other posts related to topics of interest.
 
+## Chatbot
+
+<p align="center">
+  <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
+  <img src="/demo/chatbot.png" alt="Image 2" width="45%">
+</p>
+
 ## Key Features
 - 🧑‍💼**Admin**
 
