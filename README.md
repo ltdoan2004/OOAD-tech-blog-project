@@ -33,22 +33,41 @@ cd OOAD-tech-blog-project-main
 **2.Install Dependencies:**
 ```bash
 npm install
+
+cd src/backend_web
+npm install
+
+cd src/backend
+pip install -r requirements.txt
 ```
 **3.Set Up Environment Variables:** 🔑🔑🔑
 
 Create a  *.env file*  in the root directory with the following content:
 ```bash
-# NEXT_PUBLIC_OPENAI_API_KEY=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
-# NEXT_PUBLIC_SUPABASE_URL=https://povbrhrazwjpwupekjto.supabase.co
-# NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvdmJyaHJhendqcHd1cGVranRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUxOTA0ODcsImV4cCI6MjA1MDc2NjQ4N30.RSAOrloJplJY1dN-h06gXR_hIRAiam2PIBDOTf918kM
+# NEXT_PUBLIC_OPENAI_API_KEY=*******
+# NEXT_PUBLIC_SUPABASE_URL=******
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=******
 # NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
 **📌Note that:** When using, remove all hashtag (#).
 
 **4.Run the Development Server:**
 ```bash
+# run front end
 npm i
 npm run dev
+
+#run backend web
+
+cd src/backend_web
+npm run dev
+mongosh
+
+# run backend for chatbot service
+
+cd src/backend
+uvicorn main:app --reload
+
 ```
 Open http://localhost:3000 in your browser to access the application.
 
