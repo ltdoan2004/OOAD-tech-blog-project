@@ -128,8 +128,9 @@ Open http://localhost:3000 in your browser to access the application.
 - Users can ask questions about any blog content.
 - Receive detailed answers based on the information provided in the blogs.
 - Obtain direct links to the referenced content within the responses.
-📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
 <br>
+📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
+
 **6. Switch Theme** 
 - Users can effortlessly switch between two primary color themes: **purple** and **yellow**.
 - The purple theme offers a modern and elegant feel.
