@@ -7,8 +7,8 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
 <Image
   className="circular-image"
   src="/public/logo.webp"
-  width="305"
-  height="305"
+  width="405"
+  height="405"
   alt="TechConnect Logo"
   sizes="100vw"
 /> 
@@ -49,6 +49,15 @@ Create a  *.env file*  in the root directory with the following content:
 # NEXT_PUBLIC_SUPABASE_ANON_KEY=******
 # NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
 ```
+
+Create a  *.env*  in the root directory with the following content:
+```bash
+OPENAI_API_KEY
+MONGO_URL=mongodb://localhost:27017/blog-db
+JWT_SECRET=12345
+PORT=5001
+```
+
 **📌Note that:** When using, remove all hashtag (#).
 
 **4.Run the Development Server:**
@@ -89,19 +98,26 @@ Open http://localhost:3000 in your browser to access the application.
 - **Search Functionality:** Enter keywords into the search bar to find related posts. The search results will display the most relevant articles.
 - **Utilize Tags:** Click on tags to view other posts related to topics of interest.
 
-## Chatbot
+**4. Chatbot - Agent Search** 
 
 <p align="center">
-  <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
-  <img src="/demo/chatbot.png" alt="Image 2" width="45%">
+  <img src="/demo/chatbot_2.png" alt="Image 1" width="50%">
+  <img src="/demo/chatbot.png" alt="Image 2" width="50%">
 </p>
 📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
+
+**5. Switch Theme:**
+
+Users can effortlessly switch between two primary color themes: **purple** and **yellow**. Both color schemes are designed for optimal readability and comfort, suitable for any lighting conditions. The purple theme offers a modern and elegant feel, while the yellow theme provides a warm and vibrant touch, making the content more visually engaging.
+Users can ask questions about any blog content, receive detailed answers based on the information provided in the blogs, and obtain direct links to the referenced content within the responses.
 
 
 ## Key Features
 - 🧑‍💼**Admin**
 
 - 🙆**User**
+
+
 
 ## Contributing
 _**We are very happy and satisfied to receive your comments and contributions!**_
