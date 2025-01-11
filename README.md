@@ -124,12 +124,13 @@ Open http://localhost:3000 in your browser to access the application.
   <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
   <img src="/demo/chatbot.png" alt="Image 2" width="45%">
 </p>
-  Users can ask questions about any blog content, receive detailed answers based on the information provided in the blogs, and obtain direct links to the referenced content within the responses.
+
+- Users can ask questions about any blog content, receive detailed answers based on the information provided in the blogs, and obtain direct links to the referenced content within the responses.
 📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
 
 **6.Switch Theme** 
 
-  Users can effortlessly switch between two primary color themes: **purple** and **yellow**. Both color schemes are designed for optimal readability and comfort, suitable for any lighting conditions. The purple theme offers a modern and elegant feel, while the yellow   theme provides a warm and vibrant touch, making the content more visually engaging.
+- Users can effortlessly switch between two primary color themes: **purple** and **yellow**. Both color schemes are designed for optimal readability and comfort, suitable for any lighting conditions. The purple theme offers a modern and elegant feel, while the yellow   theme provides a warm and vibrant touch, making the content more visually engaging.
 
 ## Key Features
 
