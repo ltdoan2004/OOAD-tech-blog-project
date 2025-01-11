@@ -18,7 +18,7 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
   className="circular-image"
   src="/demo/homepage.png"
   width="1513"
-  height="859"
+  height="659"
   alt="TechConnect Logo"
   sizes="100vw"
 /> 
