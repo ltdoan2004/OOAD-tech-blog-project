@@ -166,15 +166,16 @@ Users can ask questions about any blog content, receive detailed answers based o
 ## Tech Stack
 
 ### Frontend
-- Next.js 13+ (App Router)
+- [Next.js 13](https://nextjs.org/) (App Router)
 - React 18
-- TailwindCSS
-- ContentLayer for MDX
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Contentlayer for MDX](https://www.contentlayer.dev/)
 - JWT for authentication
 
 ### Backend
-- Express.js (Node.js)
-- MongoDB with Mongoose
+- [Jest](https://jestjs.io/)
+- [MongoDB](https://www.mongodb.com/)
+- [Express.js](https://expressjs.com/)
 - FastAPI (Python) for AI services
 - FAISS for vector similarity search
 - OpenAI API integration
@@ -225,22 +226,19 @@ git push origin yourBranch-name/OOAD-tech-blog-project
 
 **Thanks again for your support!❤️**
 ## Build with
-- [Next.js](https://nextjs.org/)
-- [Tailwind](https://tailwindcss.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Express.js](https://expressjs.com/)
-- [Contentlayer](https://www.contentlayer.dev/)
-- [Jest](https://jestjs.io/)
+
+
+
 
 ## Contact
 We'd like to thank all contributors who have helped improve this project:
 - Project members:
 
-  🐻  **Lê Thiên Doanh** https://github.com/ltdoan2004
+  🐻    **Lê Thiên Doanh** https://github.com/ltdoan2004
 
   🐻‍❄️  **Hồ Thiên Trường** https://github.com/TruongHo22306
 
-  🐼  **Nguyễn Thành Nam** https://github.com/ctin2004
+  🐼     **Nguyễn Thành Nam** https://github.com/ctin2004
 
 - Project link: 
 https://github.com/ltdoan2004/OOAD-tech-blog-project
@@ -261,11 +259,11 @@ https://github.com/letiendat1002/e-commerce/tree/master
 https://liai.app/
 
 Many thanks to CodeBucks : 🔥🔥🔥
-- https://www.youtube.com/@CodeBucks
+https://www.youtube.com/@CodeBucks
 
-- https://github.com/codebucks27
+https://github.com/codebucks27
 
-- https://codebucks.gumroad.com/
+https://codebucks.gumroad.com/
 
 
 ## License
