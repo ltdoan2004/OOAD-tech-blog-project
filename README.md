@@ -3,15 +3,25 @@
 
 A technology-focused blog platform designed for tech enthusiasts. This project allows users to explore, create, and contribute blog posts on various technological topics. Ideal for developers, tech writers, and anyone passionate about technology.
 
-## Web's Logo
-<Image
-  className="circular-image"
-  src="/public/logo.webp"
-  width="405"
-  height="405"
-  alt="TechConnect Logo"
-  sizes="100vw"
-/> 
+## Web's Logo and Home Page
+<div style="display: flex; justify-content: center; gap: 20px;">
+  <Image
+    className="circular-image"
+    src="/public/logo.webp"
+    width="405"
+    height="405"
+    alt="TechConnect Logo"
+    sizes="100vw"
+  />
+  <Image
+    className="circular-image"
+    src="/demo/homepage.png"
+    width="605" 
+    height="605"
+    alt="Your New Image Description"
+    sizes="100vw"
+  />
+</div> 
 
 ## Prerequisites
 Before you continue, ensure you meet the following requirements:
