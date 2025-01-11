@@ -185,9 +185,6 @@ Users can ask questions about any blog content, receive detailed answers based o
 - FAISS vector database
 - Custom prompt engineering
 
-
-## Project Structure
-
 ## Project Structure
 ```
 ├── src/
