@@ -92,7 +92,7 @@ uvicorn main:app --reload
 Open http://localhost:3000 in your browser to access the application.
 
 ## Features in Detail
-**1. User System:**
+**1.Login System:**
 - **Sign Up:** Go to the registration page and fill in the necessary information, such as your name, email address, and password. Ensure you use a valid email address to receive confirmation.
 - **Log In:** Use your registered account information to log into the application.
 - JWT-based authentication
@@ -106,19 +106,19 @@ Open http://localhost:3000 in your browser to access the application.
 - Tag-based organization
 - Draft and publish workflow 
 
-**3. Write Blog Posts:**
-- **Access the Editor:** Once logged in, navigate to the "Write Post" section in the main menu.
+**3.Create Blog Posts:**
+- **Access the Editor:** Once logged in, navigate to the "Create Post" section in the main menu.
 - **Using the Editor:**
-- **Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
-- **Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
-- **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
-- 
-**4. Explore and Search:**
++ **Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
++ **Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
++ **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
+
+**4.Explore and Search:**
 - **Browse Posts:** Use the navigation bar to access different categories or find posts by topic.
 - **Search Functionality:** Enter keywords into the search bar to find related posts. The search results will display the most relevant articles.
 - **Utilize Tags:** Click on tags to view other posts related to topics of interest.
 
-**5. Chatbot - Agent Search** 
+**5.Chatbot - Agent Search** 
 
 <p align="center">
   <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
@@ -127,11 +127,9 @@ Open http://localhost:3000 in your browser to access the application.
   Users can ask questions about any blog content, receive detailed answers based on the information provided in the blogs, and obtain direct links to the referenced content within the responses.
 📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
 
- **6. Switch Theme:**
+**6.Switch Theme** 
 
   Users can effortlessly switch between two primary color themes: **purple** and **yellow**. Both color schemes are designed for optimal readability and comfort, suitable for any lighting conditions. The purple theme offers a modern and elegant feel, while the yellow   theme provides a warm and vibrant touch, making the content more visually engaging.
-
-
 
 ## Key Features
 
@@ -162,6 +160,12 @@ Open http://localhost:3000 in your browser to access the application.
 - User management
 - Comment moderation
 - Analytics and insights
+
+### 5. User Features
+- Read blog
+- Comment
+- Use TechBot
+- Give feedback (through Contact Page)
 
 ## Tech Stack
 
