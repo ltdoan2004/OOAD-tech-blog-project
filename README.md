@@ -109,8 +109,8 @@ Open http://localhost:3000 in your browser to access the application.
 **3. Create Blog Posts:**
 - **Access the Editor:** Once logged in, navigate to the "Create Post" section in the main menu.
 - **Using the Editor:**
-+ **Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
-+ **Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
+    -**Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
+    -**Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
 + **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
 
 **4. Explore and Search:**
@@ -236,10 +236,6 @@ git push origin yourBranch-name/OOAD-tech-blog-project
 **5. Open a pull request**
 
 **Thanks again for your support!❤️**
-## Build with
-
-
-
 
 ## Contact
 We'd like to thank all contributors who have helped improve this project:
@@ -254,9 +250,8 @@ We'd like to thank all contributors who have helped improve this project:
 - Project link: 
 https://github.com/ltdoan2004/OOAD-tech-blog-project
 
-If you have any question, please contact to:
-
-   Email: doanh25032004@gmail.com, hothientruongd@gmail.com, or ngthanhnam990@gmail.com
+- If you have any question, please contact via Email:
+doanh25032004@gmail.com, hothientruongd@gmail.com, or ngthanhnam990@gmail.com
 
 ## References
 https://learncodewithdurgesh.com/course/ecommerce-project-using-java-servlet-jsp-hibernate-mysql/154
