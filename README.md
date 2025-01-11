@@ -176,16 +176,20 @@ Users can ask questions about any blog content, receive detailed answers based o
 
 
 ## Project Structure
+
+## Project Structure
+```
 ├── src/
-│ ├── app/ # Next.js pages
-│ ├── components/ # React components
-│ ├── backend/ # Python AI backend
-│ ├── backend_web/ # Node.js backend
-│ ├── context/ # React context
-│ └── utils/ # Utility functions
-├── content/ # MDX blog posts
-├── public/ # Static assets
-└── blog_index.faiss/ # FAISS vector database
+│   ├── app/               # Next.js pages
+│   ├── components/        # React components
+│   ├── backend/           # Python AI backend
+│   ├── backend_web/       # Node.js backend
+│   ├── context/           # React context
+│   ├── utils/             # Utility functions
+│   ├── content/           # MDX blog posts
+├── public/                # Static assets
+└── blog_index.faiss/      # FAISS vector database
+```
 
 ## Contributing
 _**We are very happy and satisfied to receive your comments and contributions!**_
