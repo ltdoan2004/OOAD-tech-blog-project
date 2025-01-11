@@ -121,8 +121,8 @@ Open http://localhost:3000 in your browser to access the application.
 **5. Chatbot - Agent Search** 
 
 <p align="center">
-  <img src="/demo/chatbot_2.png" alt="Image 1" width="50%">
-  <img src="/demo/chatbot.png" alt="Image 2" width="50%">
+  <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
+  <img src="/demo/chatbot.png" alt="Image 2" width="45%">
 </p>
 Users can ask questions about any blog content, receive detailed answers based on the information provided in the blogs, and obtain direct links to the referenced content within the responses.
 📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
