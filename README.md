@@ -124,8 +124,8 @@ Open http://localhost:3000 in your browser to access the application.
   <img src="/demo/chatbot_2.png" alt="Image 1" width="45%">
   <img src="/demo/chatbot.png" alt="Image 2" width="45%">
 </p>
-
 <br>
+
 - Users can ask questions about any blog content.
 - Receive detailed answers based on the information provided in the blogs.
 - Obtain direct links to the referenced content within the responses.
