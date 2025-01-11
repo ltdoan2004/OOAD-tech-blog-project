@@ -16,8 +16,8 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
   <Image
     className="circular-image"
     src="/demo/homepage.png"
-    width="605" 
-    height="605"
+    width="405" 
+    height="555"
     alt="Your New Image Description"
     sizes="100vw"
   />
