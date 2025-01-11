@@ -80,30 +80,40 @@ uvicorn main:app --reload
 ```
 Open http://localhost:3000 in your browser to access the application.
 
-## Usage
-**1. Create an Account:**
-
+## Features in Detail
+**1. User System:**
 - **Sign Up:** Go to the registration page and fill in the necessary information, such as your name, email address, and password. Ensure you use a valid email address to receive confirmation.
 - **Log In:** Use your registered account information to log into the application.
-- 
-**2. Write Blog Posts:**
+- JWT-based authentication
+- Role-based access control
+- User profile management
+- Admin privileges
+
+**2.Blog Management:**
+- MDX-based content creation
+- Image upload and management
+- Tag-based organization
+- Draft and publish workflow 
+
+**3. Write Blog Posts:**
 - **Access the Editor:** Once logged in, navigate to the "Write Post" section in the main menu.
 - **Using the Editor:**
 - **Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
 - **Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
 - **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
 - 
-**3. Explore and Search:**
+**4. Explore and Search:**
 - **Browse Posts:** Use the navigation bar to access different categories or find posts by topic.
 - **Search Functionality:** Enter keywords into the search bar to find related posts. The search results will display the most relevant articles.
 - **Utilize Tags:** Click on tags to view other posts related to topics of interest.
 
-**4. Chatbot - Agent Search** 
+**5. Chatbot - Agent Search** 
 
 <p align="center">
   <img src="/demo/chatbot_2.png" alt="Image 1" width="50%">
   <img src="/demo/chatbot.png" alt="Image 2" width="50%">
 </p>
+Users can ask questions about any blog content, receive detailed answers based on the information provided in the blogs, and obtain direct links to the referenced content within the responses.
 📖 Documentation: For detailed information, please refer to the README.md at: https://github.com/ltdoan2004/OOAD-tech-blog-project/blob/main/src/backend/README.md
 
 **5. Switch Theme:**
@@ -113,11 +123,69 @@ Users can ask questions about any blog content, receive detailed answers based o
 
 
 ## Key Features
-- 🧑‍💼**Admin**
 
-- 🙆**User**
+### 1. Content Management
+- Blog post creation and management through MDX
+- Rich text editing with image support
+- Tag-based categorization
+- Admin dashboard for content management
+- Responsive design for all devices
+
+### 2. AI Integration
+- AI-powered chatbot (TechBot) for user queries
+- Content summarization capabilities
+- Related article recommendations
+- Built with OpenAI's GPT models
+- FAISS vector database for efficient content search
+
+### 3. User Interaction
+- Real-time commenting system
+- Anonymous and authenticated commenting
+- Special highlighting for admin comments
+- Comment moderation tools
+- User authentication system
+
+### 4. Admin Features
+- Secure admin dashboard
+- Blog post management (create, edit, delete)
+- User management
+- Comment moderation
+- Analytics and insights
+
+## Tech Stack
+
+### Frontend
+- Next.js 13+ (App Router)
+- React 18
+- TailwindCSS
+- ContentLayer for MDX
+- JWT for authentication
+
+### Backend
+- Express.js (Node.js)
+- MongoDB with Mongoose
+- FastAPI (Python) for AI services
+- FAISS for vector similarity search
+- OpenAI API integration
+
+### AI/ML
+- LangChain for AI chain operations
+- OpenAI Embeddings
+- FAISS vector database
+- Custom prompt engineering
 
 
+## Project Structure
+├── src/
+│ ├── app/ # Next.js pages
+│ ├── components/ # React components
+│ ├── backend/ # Python AI backend
+│ ├── backend_web/ # Node.js backend
+│ ├── context/ # React context
+│ └── utils/ # Utility functions
+├── content/ # MDX blog posts
+├── public/ # Static assets
+└── blog_index.faiss/ # FAISS vector database
 
 ## Contributing
 _**We are very happy and satisfied to receive your comments and contributions!**_
@@ -188,6 +256,8 @@ Many thanks to CodeBucks : 🔥🔥🔥
 - https://codebucks.gumroad.com/
 
 
+## License
 
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 
