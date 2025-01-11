@@ -109,9 +109,9 @@ Open http://localhost:3000 in your browser to access the application.
 **3. Create Blog Posts:**
 - **Access the Editor:** Once logged in, navigate to the "Create Post" section in the main menu.
 - **Using the Editor:**
-    -**Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
-    -**Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
-+ **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
+  - **Interface:** The editor provides formatting tools such as headings, lists, and links, allowing you to create engaging content.
+  - **Insert Images:** You can add images to your post by dragging and dropping them or using the "Insert Image" button.
+  - **Publish:** When you're finished writing, click the "Publish" button to share your post with the community.
 
 **4. Explore and Search:**
 - **Browse Posts:** Use the navigation bar to access different categories or find posts by topic.
