@@ -8,16 +8,16 @@ A technology-focused blog platform designed for tech enthusiasts. This project a
   <Image
     className="circular-image"
     src="/public/logo.webp"
-    width="405"
-    height="405"
+    width="305"
+    height="305"
     alt="TechConnect Logo"
     sizes="100vw"
   />
   <Image
     className="circular-image"
     src="/demo/homepage.png"
-    width="405" 
-    height="555"
+    width="605" 
+    height="305"
     alt="Your New Image Description"
     sizes="100vw"
   />
