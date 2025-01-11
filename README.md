@@ -250,7 +250,7 @@ We'd like to thank all contributors who have helped improve this project:
 - Project link: 
 https://github.com/ltdoan2004/OOAD-tech-blog-project
 
-- If you have any question, please contact via Email:
+- If you have any question, please contact us via Email:
 doanh25032004@gmail.com, hothientruongd@gmail.com, or ngthanhnam990@gmail.com
 
 ## References
@@ -264,7 +264,9 @@ https://github.com/letiendat1002/e-commerce/tree/master
 
 https://liai.app/
 
-Many thanks to CodeBucks : 🔥🔥🔥
+🔥🔥🔥Many thanks to CodeBucks : 
+<br>
+
 https://www.youtube.com/@CodeBucks
 
 https://github.com/codebucks27
